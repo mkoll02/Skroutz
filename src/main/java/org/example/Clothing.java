@@ -29,8 +29,10 @@ public class Clothing extends Product {
      */
     @Override
     public String toString() {
+
         return super.toString() +
                 " | Size: " + size +
                 " | Color: " + color;
+
     }
 }

@@ -47,12 +47,12 @@ public class SkroutzManager {
         int choice = sc.nextInt();
 
         if (choice == 1) {
-            System.out.print("Δώσε AFM: ");
+            System.out.print("Παρακαλώ πληκτρολογήστε το ΑΦΜ.");
             String afm = sc.next();
             for (Eshop e : eshops)
                 if (e.getAfm().equals(afm)) return e;
         } else {
-            System.out.print("Δώσε website: ");
+            System.out.print("Παρακαλώ πληκτρολογήστε το website.");
             String web = sc.next();
             for (Eshop e : eshops)
                 if (e.getWebsite().equals(web)) return e;
@@ -82,5 +82,7 @@ public class SkroutzManager {
         return null;
     }
 
-    public ArrayList<Eshop> getEshops() { return eshops; }
+    public ArrayList<Eshop> getEshops() {
+        return eshops;
+    }
 }

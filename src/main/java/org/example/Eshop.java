@@ -80,6 +80,8 @@ public class Eshop {
 
     @Override
     public String toString() {
+
         return "Website: " + website + " | AFM: " + afm;
+
     }
 }
