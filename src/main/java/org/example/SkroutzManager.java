@@ -12,7 +12,7 @@ public class SkroutzManager {
     public void addProduct(Product p) { products.add(p); }
 
     public Product findProductByBarcode() {
-        System.out.println("Δώσε barcode:");
+        System.out.println("Παρακαλώ πληκτρολογήστε το barcode");
         String code = sc.next();
 
         for (Product p : products) {

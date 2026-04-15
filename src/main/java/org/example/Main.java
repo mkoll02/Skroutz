@@ -16,10 +16,12 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int choice;
 
+        System.out.println("\n --- Καλώς ήρθατε! ---");
+
         do {
-            System.out.println("\n1. Καταχώρηση προϊόντος");
+            System.out.println("1. Καταχώρηση προϊόντος");
             System.out.println("2. Ανανέωση αποθέματος");
-            System.out.println("0. Έξοδος");
+            System.out.println("3. Έξοδος");
             choice = sc.nextInt();
 
             switch (choice) {
