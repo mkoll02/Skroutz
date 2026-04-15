@@ -33,6 +33,6 @@ public class Main {
                     break;
             }
 
-        } while (choice != 0);
+        } while (choice != 3);
     }
 }
