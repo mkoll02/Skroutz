@@ -1,13 +1,36 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+import java.util.Scanner;
+
+public class it2024131
+
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
+        SkroutzManager manager = new SkroutzManager();
+        InitializeData init = new InitializeData();
+        init.data(manager);
 
+        FunctionsHelper helper = new FunctionsHelper();
+        Functions functions = new Functions(helper);
+
+        Scanner sc = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\n1. Καταχώρηση προϊόντος");
+            System.out.println("2. Ανανέωση αποθέματος");
+            System.out.println("0. Έξοδος");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    functions.function1(manager);
+                    break;
+                case 2:
+                    functions.function2(manager);
+                    break;
+            }
+
+        } while (choice != 0);
     }
 }
