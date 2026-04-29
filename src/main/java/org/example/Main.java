@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         SkroutzManager manager = new SkroutzManager();
+
         InitializeData init = new InitializeData();
         init.data(manager);
 
@@ -16,21 +17,21 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int choice;
 
-        System.out.println("\n --- Καλώς ήρθατε! ---");
+        System.out.println("--- Skroutz System ---");
 
         do {
-            System.out.println("1. Καταχώρηση προϊόντος");
-            System.out.println("2. Ανανέωση αποθέματος");
+            System.out.println("\n1. Καταχώρηση προϊόντος");
+            System.out.println("2. Ανανέωση stock");
             System.out.println("3. Έξοδος");
+            System.out.print("Επιλογή: ");
+
             choice = sc.nextInt();
 
             switch (choice) {
-                case 1:
-                    functions.function1(manager);
-                    break;
-                case 2:
-                    functions.function2(manager);
-                    break;
+                case 1 -> functions.function1(manager);
+                case 2 -> functions.function2(manager);
+                case 3 -> System.out.println("Έξοδος");
+                default -> System.out.println("Λάθος επιλογή");
             }
 
         } while (choice != 3);

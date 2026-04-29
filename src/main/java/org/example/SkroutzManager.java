@@ -5,84 +5,136 @@ import java.util.Scanner;
 
 public class SkroutzManager {
 
-    private ArrayList<Product> products = new ArrayList<>();
-    private ArrayList<Eshop> eshops = new ArrayList<>();
-    private Scanner sc = new Scanner(System.in);
+    private ArrayList<Product> products;
+    private ArrayList<Eshop> eshops;
+    private Scanner sc;
 
-    public void addProduct(Product p) { products.add(p); }
+    public SkroutzManager() {
+        products = new ArrayList<>();
+        eshops = new ArrayList<>();
+        sc = new Scanner(System.in);
+    }
+
+    public ArrayList<Eshop> getEshops() { return eshops; }
+
+    // Προσθήκη προϊόντος χωρίς duplicate barcode
+    public void addProduct(Product p) {
+
+        if (p == null) return;
+
+        for (Product prod : products) {
+            if (prod.getBarcode().equals(p.getBarcode())) {
+                System.out.println("Το προϊόν υπάρχει ήδη.");
+                return;
+            }
+        }
+
+        products.add(p);
+    }
+
+    public void displayEshops() {
+        for (Eshop e : eshops) {
+            System.out.println(e);
+        }
+    }
 
     public Product findProductByBarcode() {
-        System.out.println("Παρακαλώ πληκτρολογήστε το barcode");
-        String code = sc.next();
+
+        System.out.print("Δώσε barcode: ");
+        String barcode = sc.next();
 
         for (Product p : products) {
-            if (p.getBarcode().equals(code)) return p;
+            if (p.getBarcode().equals(barcode)) {
+                return p;
+            }
         }
+
+        return null;
+    }
+
+    public Eshop findEshop() {
+
+        System.out.print("Αναζήτηση e-shop (AFM ή website): ");
+        String input = sc.next();
+
+        for (Eshop e : eshops) {
+            if (e.getAfm().equals(input) ||
+                    e.getWebsite().equalsIgnoreCase(input)) {
+                return e;
+            }
+        }
+
         return null;
     }
 
     public Product createProduct() {
-        System.out.println("Νέο προϊόν:");
+
+        System.out.println("Νέο προϊόν");
+
         System.out.print("barcode: ");
         String barcode = sc.next();
+
         System.out.print("name: ");
         String name = sc.next();
+
         System.out.print("category: ");
         String category = sc.next();
+
         System.out.print("brand: ");
         String brand = sc.next();
 
-        if (category.equals("ρούχα"))
-            return new Clothing(barcode, name, brand, "M", "Black");
+        if (category.equalsIgnoreCase("ρούχα")) {
 
-        if (category.equals("υποδήματα"))
-            return new Shoes(barcode, name, brand, "42", "White");
+            System.out.print("size (S/M/L): ");
+            String size = sc.next();
+
+            System.out.print("color: ");
+            String color = sc.next();
+
+            return new Clothing(barcode, name, brand, size, color);
+        }
+
+        if (category.equalsIgnoreCase("υποδήματα")) {
+
+            System.out.print("size: ");
+            int size = sc.nextInt();
+
+            System.out.print("color: ");
+            String color = sc.next();
+
+            return new Shoes(barcode, name, brand, size, color);
+        }
 
         return new Product(barcode, name, category, brand);
     }
 
-    public Eshop findEshop() {
-        System.out.println("1. AFM");
-        System.out.println("2. Website");
-        int choice = sc.nextInt();
+    public int getStock() {
 
-        if (choice == 1) {
-            System.out.print("Παρακαλώ πληκτρολογήστε το ΑΦΜ.");
-            String afm = sc.next();
-            for (Eshop e : eshops)
-                if (e.getAfm().equals(afm)) return e;
-        } else {
-            System.out.print("Παρακαλώ πληκτρολογήστε το website.");
-            String web = sc.next();
-            for (Eshop e : eshops)
-                if (e.getWebsite().equals(web)) return e;
+        while (true) {
+            try {
+                System.out.print("Stock: ");
+                int stock = Integer.parseInt(sc.next());
+
+                if (stock >= 0) return stock;
+
+            } catch (Exception e) {}
+
+            System.out.println("Δώσε σωστό αριθμό.");
         }
-        return null;
     }
 
-    public int getStockFromUser() {
-        System.out.print("Stock: ");
-        return sc.nextInt();
-    }
+    public double getPrice() {
 
-    public double getPriceFromUser() {
-        System.out.print("Price: ");
-        return sc.nextDouble();
-    }
+        while (true) {
+            try {
+                System.out.print("Price: ");
+                double price = Double.parseDouble(sc.next());
 
-    public String getBarcodeFromUser() {
-        System.out.print("Barcode: ");
-        return sc.next();
-    }
+                if (price > 0) return price;
 
-    public StockItem findStockItem(Eshop shop, String barcode) {
-        for (StockItem s : shop.getProducts())
-            if (s.getProduct().getBarcode().equals(barcode))
-                return s;
-        return null;
-    }
+            } catch (Exception e) {}
 
-    public ArrayList<Eshop> getEshops() {
-        return eshops;
+            System.out.println("Δώσε σωστή τιμή.");
+        }
     }
 }

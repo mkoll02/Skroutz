@@ -1,71 +1,58 @@
-
 package org.example;
 
 import java.util.ArrayList;
 
-/*
- * Κλάση που αναπαριστά ένα e-shop.
- */
 public class Eshop {
 
-    // Website του e-shop
     private String website;
-
-    // ΑΦΜ επιχείρησης
     private String afm;
-
-    // Email επικοινωνίας
     private String email;
 
-    // Λίστα προϊόντων που πουλά το e-shop
     private ArrayList<StockItem> products;
 
-    /*
-     * Constructor
-     */
     public Eshop(String website, String afm, String email) {
-        this.website = website;
+
+        if (website == null || website.trim().isEmpty()) {
+            throw new IllegalArgumentException("Μη έγκυρο website");
+        }
+        this.website = website.trim();
+
+        // ΑΦΜ: 9 ψηφία
+        if (afm == null || !afm.matches("\\d{9}")) {
+            throw new IllegalArgumentException("Μη έγκυρο ΑΦΜ");
+        }
         this.afm = afm;
+
+        if (email == null || !email.contains("@")) {
+            throw new IllegalArgumentException("Μη έγκυρο email");
+        }
         this.email = email;
+
         products = new ArrayList<>();
     }
 
-    public String getAfm() {
-        return afm;
-    }
+    public String getWebsite() { return website; }
+    public String getAfm() { return afm; }
+    public ArrayList<StockItem> getProducts() { return products; }
 
-    public String getWebsite() {
-        return website;
-    }
-
-    public ArrayList<StockItem> getProducts() {
-        return products;
-    }
-
-    /*
-     * Προσθήκη προϊόντος στο eshop
-     * Αν υπάρχει ήδη, ενημερώνεται stock και τιμή
-     */
+    // Προσθήκη ή ενημέρωση προϊόντος
     public void addProduct(Product p, int stock, double price) {
 
+        if (p == null) {
+            throw new IllegalArgumentException("Άκυρο προϊόν");
+        }
+
         for (StockItem item : products) {
-
-            // Αν υπάρχει ήδη το προϊόν
             if (item.getProduct().getBarcode().equals(p.getBarcode())) {
-
                 item.setStock(stock);
                 item.setPrice(price);
                 return;
             }
         }
 
-        // Αν δεν υπάρχει δημιουργείται νέο
         products.add(new StockItem(p, stock, price));
     }
 
-    /*
-     * Εμφάνιση όλων των προϊόντων του eshop
-     */
     public void displayProducts() {
 
         if (products.isEmpty()) {
@@ -80,8 +67,7 @@ public class Eshop {
 
     @Override
     public String toString() {
-
-        return "Website: " + website + " | AFM: " + afm;
-
+        return "Website: " + website +
+                " | AFM: " + afm;
     }
 }

@@ -1,52 +1,41 @@
 package org.example;
 
-/*
- * Βασική κλάση προϊόντος.
- * Όλα τα προϊόντα του συστήματος κληρονομούν από αυτή.
- * Περιέχει τα κοινά χαρακτηριστικά που έχουν όλα τα προϊόντα.
- */
 public class Product {
 
-    // Μοναδικός κωδικός προϊόντος
-    protected String barcode;
+    // Βασικά χαρακτηριστικά προϊόντος
+    private String barcode;
+    private String name;
+    private String category;
+    private String brand;
 
-    // Όνομα προϊόντος
-    protected String name;
-
-    // Κατηγορία προϊόντος (ρούχα, υποδήματα, φαρμακείου)
-    protected String category;
-
-    // Brand προϊόντος
-    protected String brand;
-
-    /*
-     * Constructor για δημιουργία προϊόντος
-     */
     public Product(String barcode, String name, String category, String brand) {
+
+        // Έλεγχος barcode (μόνο αριθμοί)
+        if (barcode == null || !barcode.matches("\\d+")) {
+            throw new IllegalArgumentException("Μη έγκυρο barcode (μόνο αριθμοί)");
+        }
         this.barcode = barcode;
-        this.name = name;
-        this.category = category;
-        this.brand = brand;
+
+        // Έλεγχος ονόματος
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Μη έγκυρο όνομα");
+        }
+        this.name = name.trim();
+
+        // Αν δεν δοθεί κατηγορία
+        this.category = (category == null || category.trim().isEmpty())
+                ? "άγνωστο" : category.trim();
+
+        // Αν δεν δοθεί brand
+        this.brand = (brand == null || brand.trim().isEmpty())
+                ? "άγνωστο" : brand.trim();
     }
 
-    // Getter για barcode
-    public String getBarcode() {
-        return barcode;
-    }
+    public String getBarcode() { return barcode; }
+    public String getName() { return name; }
+    public String getCategory() { return category; }
+    public String getBrand() { return brand; }
 
-    // Getter για όνομα
-    public String getName() {
-        return name;
-    }
-
-    // Getter για κατηγορία
-    public String getCategory() {
-        return category;
-    }
-
-    /*
-     * Μέθοδος που επιστρέφει πληροφορίες προϊόντος
-     */
     @Override
     public String toString() {
         return "Barcode: " + barcode +
