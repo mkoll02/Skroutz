@@ -7,24 +7,36 @@ public class SkroutzManager {
 
     private ArrayList<Product> products;
     private ArrayList<Eshop> eshops;
+
     private Scanner sc;
 
     public SkroutzManager() {
+
         products = new ArrayList<>();
         eshops = new ArrayList<>();
+
         sc = new Scanner(System.in);
     }
 
-    public ArrayList<Eshop> getEshops() { return eshops; }
+    public ArrayList<Eshop> getEshops() {
+        return eshops;
+    }
 
     // Προσθήκη προϊόντος χωρίς duplicate barcode
     public void addProduct(Product p) {
 
-        if (p == null) return;
+        if (p == null) {
+            return;
+        }
 
         for (Product prod : products) {
-            if (prod.getBarcode().equals(p.getBarcode())) {
-                System.out.println("Το προϊόν υπάρχει ήδη.");
+
+            if (prod.getBarcode()
+                    .equals(p.getBarcode())) {
+
+                System.out.println(
+                        "Το προϊόν υπάρχει ήδη.");
+
                 return;
             }
         }
@@ -32,7 +44,46 @@ public class SkroutzManager {
         products.add(p);
     }
 
+    // Έλεγχος ύπαρξης barcode
+    public boolean barcodeExists(String barcode) {
+
+        for (Product p : products) {
+
+            if (p.getBarcode().equals(barcode)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Έλεγχος duplicate e-shop
+    public boolean eshopExists(String afm,
+                               String website) {
+
+        for (Eshop e : eshops) {
+
+            if (e.getAfm().equals(afm) ||
+                    e.getWebsite()
+                            .equalsIgnoreCase(website)) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void displayEshops() {
+
+        if (eshops.isEmpty()) {
+            System.out.println(
+                    "Δεν υπάρχουν e-shops.");
+            return;
+        }
+
+        System.out.println("\n===== E-SHOPS =====");
+
         for (Eshop e : eshops) {
             System.out.println(e);
         }
@@ -41,9 +92,11 @@ public class SkroutzManager {
     public Product findProductByBarcode() {
 
         System.out.print("Δώσε barcode: ");
-        String barcode = sc.next();
+
+        String barcode = sc.nextLine();
 
         for (Product p : products) {
+
             if (p.getBarcode().equals(barcode)) {
                 return p;
             }
@@ -54,12 +107,17 @@ public class SkroutzManager {
 
     public Eshop findEshop() {
 
-        System.out.print("Αναζήτηση e-shop (AFM ή website): ");
-        String input = sc.next();
+        System.out.print(
+                "Αναζήτηση e-shop (AFM ή website): ");
+
+        String input = sc.nextLine();
 
         for (Eshop e : eshops) {
+
             if (e.getAfm().equals(input) ||
-                    e.getWebsite().equalsIgnoreCase(input)) {
+                    e.getWebsite()
+                            .equalsIgnoreCase(input)) {
+
                 return e;
             }
         }
@@ -69,72 +127,176 @@ public class SkroutzManager {
 
     public Product createProduct() {
 
-        System.out.println("Νέο προϊόν");
+        System.out.println("\n===== Νέο προϊόν =====");
 
-        System.out.print("barcode: ");
-        String barcode = sc.next();
+        String barcode;
 
-        System.out.print("name: ");
-        String name = sc.next();
+        while (true) {
 
-        System.out.print("category: ");
-        String category = sc.next();
+            System.out.print("Barcode: ");
+            barcode = sc.nextLine();
 
-        System.out.print("brand: ");
-        String brand = sc.next();
+            // Μόνο αριθμοί
+            if (!barcode.matches("\\d+")) {
 
-        if (category.equalsIgnoreCase("ρούχα")) {
+                System.out.println(
+                        "Το barcode πρέπει να έχει μόνο αριθμούς.");
 
-            System.out.print("size (S/M/L): ");
-            String size = sc.next();
+                continue;
+            }
 
-            System.out.print("color: ");
-            String color = sc.next();
+            // Duplicate barcode
+            if (barcodeExists(barcode)) {
 
-            return new Clothing(barcode, name, brand, size, color);
+                System.out.println(
+                        "Το barcode υπάρχει ήδη.");
+
+                continue;
+            }
+
+            break;
         }
 
-        if (category.equalsIgnoreCase("υποδήματα")) {
+        System.out.print("Name: ");
+        String name = sc.nextLine();
 
-            System.out.print("size: ");
-            int size = sc.nextInt();
+        String category;
 
-            System.out.print("color: ");
-            String color = sc.next();
+        while (true) {
 
-            return new Shoes(barcode, name, brand, size, color);
+            System.out.print(
+                    "Category (ρούχα / υποδήματα / καλλυντικά): ");
+
+            category =
+                    sc.nextLine().trim().toLowerCase();
+
+            if (category.equals("ρούχα") ||
+                    category.equals("υποδήματα") ||
+                    category.equals("καλλυντικά")) {
+
+                break;
+            }
+
+            System.out.println(
+                    "Μη αποδεκτή κατηγορία.");
         }
 
-        return new Product(barcode, name, category, brand);
+        System.out.print("Brand: ");
+        String brand = sc.nextLine();
+
+        // Ρούχα
+        if (category.equals("ρούχα")) {
+
+            System.out.print("Size (S/M/L): ");
+            String size = sc.nextLine();
+
+            System.out.print("Color: ");
+            String color = sc.nextLine();
+
+            return new Clothing(
+                    barcode,
+                    name,
+                    brand,
+                    size,
+                    color
+            );
+        }
+
+        // Υποδήματα
+        if (category.equals("υποδήματα")) {
+
+            int size;
+
+            while (true) {
+
+                try {
+
+                    System.out.print("Size: ");
+
+                    size = Integer.parseInt(
+                            sc.nextLine());
+
+                    break;
+
+                } catch (NumberFormatException e) {
+
+                    System.out.println(
+                            "Δώσε έγκυρο αριθμό.");
+                }
+            }
+
+            System.out.print("Color: ");
+            String color = sc.nextLine();
+
+            return new Shoes(
+                    barcode,
+                    name,
+                    brand,
+                    size,
+                    color
+            );
+        }
+
+        // Καλλυντικά
+        return new Product(
+                barcode,
+                name,
+                category,
+                brand
+        );
     }
 
+    // Έλεγχος stock
     public int getStock() {
 
         while (true) {
+
             try {
+
                 System.out.print("Stock: ");
-                int stock = Integer.parseInt(sc.next());
 
-                if (stock >= 0) return stock;
+                int stock =
+                        Integer.parseInt(sc.nextLine());
 
-            } catch (Exception e) {}
+                if (stock >= 0) {
+                    return stock;
+                }
 
-            System.out.println("Δώσε σωστό αριθμό.");
+                System.out.println(
+                        "Το stock δεν μπορεί να είναι αρνητικό.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Δώσε σωστό αριθμό.");
+            }
         }
     }
 
+    // Έλεγχος τιμής
     public double getPrice() {
 
         while (true) {
+
             try {
+
                 System.out.print("Price: ");
-                double price = Double.parseDouble(sc.next());
 
-                if (price > 0) return price;
+                double price =
+                        Double.parseDouble(sc.nextLine());
 
-            } catch (Exception e) {}
+                if (price > 0) {
+                    return price;
+                }
 
-            System.out.println("Δώσε σωστή τιμή.");
+                System.out.println(
+                        "Η τιμή πρέπει να είναι θετική.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Δώσε σωστή τιμή.");
+            }
         }
     }
 }

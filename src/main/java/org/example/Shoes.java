@@ -2,28 +2,49 @@ package org.example;
 
 public class Shoes extends Product {
 
+    private static final int MIN_SIZE = 37;
+    private static final int MAX_SIZE = 45;
+    private static final int DEFAULT_SIZE = 40;
+
     private int size;
     private String color;
 
-    public Shoes(String barcode, String name, String brand, int size, String color) {
+    public Shoes(String barcode,
+                 String name,
+                 String brand,
+                 int size,
+                 String color) {
 
         super(barcode, name, "υποδήματα", brand);
 
-        // Μέγεθος 37-45
-        if (size >= 37 && size <= 45) {
+        // Μέγεθος παπουτσιού
+        if (size >= MIN_SIZE && size <= MAX_SIZE) {
             this.size = size;
         } else {
-            this.size = 40;
+            this.size = DEFAULT_SIZE;
         }
 
-        this.color = (color == null || color.trim().isEmpty())
-                ? "unknown" : color.trim();
+        // Έλεγχος χρώματος
+        if (color == null || color.trim().isEmpty()) {
+            this.color = "Unknown";
+        } else {
+            this.color = color.trim();
+        }
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override
     public String toString() {
+
         return super.toString() +
-                " | Size: " + size +
-                " | Color: " + color;
+                "\nSize     : " + size +
+                "\nColor    : " + color;
     }
 }

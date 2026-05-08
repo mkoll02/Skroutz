@@ -5,7 +5,11 @@ public class Clothing extends Product {
     private String size;
     private String color;
 
-    public Clothing(String barcode, String name, String brand, String size, String color) {
+    public Clothing(String barcode,
+                    String name,
+                    String brand,
+                    String size,
+                    String color) {
 
         super(barcode, name, "ρούχα", brand);
 
@@ -16,18 +20,33 @@ public class Clothing extends Product {
                         size.equalsIgnoreCase("L"))) {
 
             this.size = size.toUpperCase();
+
         } else {
-            this.size = "M"; // default
+
+            this.size = "M";
         }
 
-        this.color = (color == null || color.trim().isEmpty())
-                ? "unknown" : color.trim();
+        // Έλεγχος χρώματος
+        if (color == null || color.trim().isEmpty()) {
+            this.color = "Unknown";
+        } else {
+            this.color = color.trim();
+        }
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override
     public String toString() {
+
         return super.toString() +
-                " | Size: " + size +
-                " | Color: " + color;
+                "\nSize     : " + size +
+                "\nColor    : " + color;
     }
 }
