@@ -1,55 +1,74 @@
 package org.example;
 
+/**
+ * Βασική κλάση προϊόντος.
+ */
 public class Product {
 
-    private String barcode;
-    private String name;
-    private String category;
-    private String brand;
+    public static final String CATEGORY_CLOTHING = "ρούχα";
+    public static final String CATEGORY_SHOES = "υποδήματα";
+    public static final String CATEGORY_PHARMACY = "προϊόντα φαρμακείου";
+
+    private final String barcode;
+    private final String name;
+    private final String category;
+    private final String brand;
 
     public Product(String barcode,
                    String name,
                    String category,
                    String brand) {
 
-        // Barcode μόνο αριθμοί
-        if (barcode == null || !barcode.matches("\\d+")) {
-            throw new IllegalArgumentException(
-                    "Μη έγκυρο barcode.");
-        }
-
-        // Έλεγχος ονόματος
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Μη έγκυρο όνομα.");
-        }
-
-        // Έλεγχος κατηγορίας
-        if (category == null || category.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Μη έγκυρη κατηγορία.");
-        }
+        validateBarcode(barcode);
+        validateText(name, "Μη έγκυρο όνομα.");
+        validateText(category, "Μη έγκυρη κατηγορία.");
+        validateText(brand, "Μη έγκυρο brand.");
 
         category = category.trim().toLowerCase();
 
-        if (!category.equals("ρούχα") &&
-                !category.equals("υποδήματα") &&
-                !category.equals("καλλυντικά")) {
+        if (!isValidCategory(category)) {
 
             throw new IllegalArgumentException(
                     "Μη αποδεκτή κατηγορία.");
-        }
-
-        // Έλεγχος brand
-        if (brand == null || brand.trim().isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Μη έγκυρο brand.");
         }
 
         this.barcode = barcode.trim();
         this.name = name.trim();
         this.category = category;
         this.brand = brand.trim();
+    }
+
+    public static boolean isValidCategory(String category) {
+
+        if (category == null) {
+            return false;
+        }
+
+        category = category.trim().toLowerCase();
+
+        return category.equals(CATEGORY_CLOTHING)
+                || category.equals(CATEGORY_SHOES)
+                || category.equals(CATEGORY_PHARMACY);
+    }
+
+    protected static void validateBarcode(String barcode) {
+
+        if (barcode == null
+                || !barcode.trim().matches("\\d+")) {
+
+            throw new IllegalArgumentException(
+                    "Μη έγκυρο barcode.");
+        }
+    }
+
+    protected static void validateText(String text,
+                                       String message) {
+
+        if (text == null
+                || text.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(message);
+        }
     }
 
     public String getBarcode() {

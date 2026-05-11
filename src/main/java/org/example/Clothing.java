@@ -1,9 +1,16 @@
 package org.example;
 
+/**
+ * Κλάση ρούχων.
+ */
 public class Clothing extends Product {
 
-    private String size;
-    private String color;
+    private static final String SIZE_S = "S";
+    private static final String SIZE_M = "M";
+    private static final String SIZE_L = "L";
+
+    private final String size;
+    private final String color;
 
     public Clothing(String barcode,
                     String name,
@@ -11,27 +18,26 @@ public class Clothing extends Product {
                     String size,
                     String color) {
 
-        super(barcode, name, "ρούχα", brand);
+        super(barcode, name, CATEGORY_CLOTHING, brand);
 
-        // Επιτρέπονται μόνο S, M, L
-        if (size != null &&
-                (size.equalsIgnoreCase("S") ||
-                        size.equalsIgnoreCase("M") ||
-                        size.equalsIgnoreCase("L"))) {
+        validateText(size,
+                "Το μέγεθος δεν μπορεί να είναι κενό.");
 
-            this.size = size.toUpperCase();
+        validateText(color,
+                "Το χρώμα δεν μπορεί να είναι κενό.");
 
-        } else {
+        size = size.trim().toUpperCase();
 
-            this.size = "M";
+        if (!size.equals(SIZE_S)
+                && !size.equals(SIZE_M)
+                && !size.equals(SIZE_L)) {
+
+            throw new IllegalArgumentException(
+                    "Επιτρεπτά μεγέθη: S, M, L.");
         }
 
-        // Έλεγχος χρώματος
-        if (color == null || color.trim().isEmpty()) {
-            this.color = "Unknown";
-        } else {
-            this.color = color.trim();
-        }
+        this.size = size;
+        this.color = color.trim();
     }
 
     public String getSize() {

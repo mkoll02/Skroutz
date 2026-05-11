@@ -1,13 +1,15 @@
 package org.example;
 
+/**
+ * Κλάση υποδημάτων.
+ */
 public class Shoes extends Product {
 
     private static final int MIN_SIZE = 37;
     private static final int MAX_SIZE = 45;
-    private static final int DEFAULT_SIZE = 40;
 
-    private int size;
-    private String color;
+    private final int size;
+    private final String color;
 
     public Shoes(String barcode,
                  String name,
@@ -15,21 +17,19 @@ public class Shoes extends Product {
                  int size,
                  String color) {
 
-        super(barcode, name, "υποδήματα", brand);
+        super(barcode, name, CATEGORY_SHOES, brand);
 
-        // Μέγεθος παπουτσιού
-        if (size >= MIN_SIZE && size <= MAX_SIZE) {
-            this.size = size;
-        } else {
-            this.size = DEFAULT_SIZE;
+        if (size < MIN_SIZE || size > MAX_SIZE) {
+
+            throw new IllegalArgumentException(
+                    "Το μέγεθος πρέπει να είναι 37-45.");
         }
 
-        // Έλεγχος χρώματος
-        if (color == null || color.trim().isEmpty()) {
-            this.color = "Unknown";
-        } else {
-            this.color = color.trim();
-        }
+        validateText(color,
+                "Το χρώμα δεν μπορεί να είναι κενό.");
+
+        this.size = size;
+        this.color = color.trim();
     }
 
     public int getSize() {

@@ -1,8 +1,12 @@
 package org.example;
 
+/**
+ * Συνδέει προϊόν με stock και τιμή.
+ */
 public class StockItem {
 
-    private Product product;
+    private final Product product;
+
     private int stock;
     private double price;
 
@@ -11,23 +15,15 @@ public class StockItem {
                      double price) {
 
         if (product == null) {
-            throw new IllegalArgumentException(
-                    "Το προϊόν είναι null.");
-        }
 
-        if (stock < 0) {
             throw new IllegalArgumentException(
-                    "Μη έγκυρο stock.");
-        }
-
-        if (price <= 0) {
-            throw new IllegalArgumentException(
-                    "Μη έγκυρη τιμή.");
+                    "Το προϊόν δεν μπορεί να είναι null.");
         }
 
         this.product = product;
-        this.stock = stock;
-        this.price = price;
+
+        setStock(stock);
+        setPrice(price);
     }
 
     public Product getProduct() {
@@ -45,8 +41,9 @@ public class StockItem {
     public void setStock(int stock) {
 
         if (stock < 0) {
+
             throw new IllegalArgumentException(
-                    "Μη έγκυρο stock.");
+                    "Το stock δεν μπορεί να είναι αρνητικό.");
         }
 
         this.stock = stock;
@@ -55,8 +52,9 @@ public class StockItem {
     public void setPrice(double price) {
 
         if (price <= 0) {
+
             throw new IllegalArgumentException(
-                    "Μη έγκυρη τιμή.");
+                    "Η τιμή πρέπει να είναι θετική.");
         }
 
         this.price = price;
