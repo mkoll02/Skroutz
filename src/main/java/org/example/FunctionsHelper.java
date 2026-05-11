@@ -2,9 +2,16 @@ package org.example;
 
 import java.util.Scanner;
 
+/**
+ * Βοηθητική κλάση λειτουργιών.
+ */
 public class FunctionsHelper {
 
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc;
+
+    public FunctionsHelper(Scanner sc) {
+        this.sc = sc;
+    }
 
     public void handleInsert(SkroutzManager manager) {
 
@@ -13,6 +20,10 @@ public class FunctionsHelper {
         Product p = manager.findProductByBarcode();
 
         if (p == null) {
+
+            System.out.println("Το προϊόν δεν υπάρχει.");
+            System.out.println("Δημιουργία νέου προϊόντος...");
+
             p = manager.createProduct();
             manager.addProduct(p);
         }
@@ -29,11 +40,11 @@ public class FunctionsHelper {
 
         shop.addProduct(p, stock, price);
 
-        System.out.println("Καταχωρήθηκε:");
-        System.out.println("Shop: " + shop.getWebsite() +
-                " | Product: " + p.getName() +
-                " | Stock: " + stock +
-                " | Price: " + price);
+        System.out.println("\n===== Επιτυχής καταχώρηση =====");
+        System.out.println("Website : " + shop.getWebsite());
+        System.out.println("Product : " + p.getName());
+        System.out.println("Stock   : " + stock);
+        System.out.println("Price   : " + price);
     }
 
     public void handleUpdateStock(SkroutzManager manager) {
@@ -41,24 +52,28 @@ public class FunctionsHelper {
         Eshop shop = manager.findEshop();
 
         if (shop == null) {
-            System.out.println("Δεν βρέθηκε.");
+            System.out.println("Δεν βρέθηκε e-shop.");
             return;
         }
 
         shop.displayProducts();
 
-        System.out.print("Δώσε barcode: ");
-        String barcode = sc.next();
+        System.out.print("Δώσε barcode προϊόντος: ");
+        String barcode = sc.nextLine().trim();
 
         for (StockItem item : shop.getProducts()) {
 
-            if (item.getProduct().getBarcode().equals(barcode)) {
+            if (item.getProduct()
+                    .getBarcode()
+                    .equals(barcode)) {
 
                 int newStock = manager.getStock();
+
                 item.setStock(newStock);
 
-                System.out.println("Ενημερώθηκε.");
+                System.out.println("\nΤο stock ενημερώθηκε.");
                 shop.displayProducts();
+
                 return;
             }
         }
