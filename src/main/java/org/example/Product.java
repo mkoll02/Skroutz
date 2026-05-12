@@ -2,34 +2,67 @@ package org.example;
 
 /**
  * Βασική κλάση προϊόντος.
+ * Περιγράφει τα κοινά χαρακτηριστικά όλων των προϊόντων.
  */
 public class Product {
 
+    /**
+     * Σταθερές επιτρεπτών κατηγοριών προϊόντων.
+     */
     public static final String CATEGORY_CLOTHING = "ρούχα";
     public static final String CATEGORY_SHOES = "υποδήματα";
     public static final String CATEGORY_PHARMACY = "προϊόντα φαρμακείου";
 
+    /**
+     * Μοναδικός κωδικός προϊόντος.
+     */
     private final String barcode;
+
+    /**
+     * Ονομασία προϊόντος.
+     */
     private final String name;
+
+    /**
+     * Κατηγορία προϊόντος.
+     */
     private final String category;
+
+    /**
+     * Brand προϊόντος.
+     */
     private final String brand;
 
+    /**
+     * Constructor προϊόντος.
+     *
+     * @param barcode μοναδικός κωδικός
+     * @param name όνομα προϊόντος
+     * @param category κατηγορία προϊόντος
+     * @param brand brand προϊόντος
+     */
     public Product(String barcode,
                    String name,
                    String category,
                    String brand) {
 
         validateBarcode(barcode);
-        validateText(name, "Μη έγκυρο όνομα.");
-        validateText(category, "Μη έγκυρη κατηγορία.");
-        validateText(brand, "Μη έγκυρο brand.");
+
+        validateText(name,
+                "Το όνομα προϊόντος δεν μπορεί να είναι κενό.");
+
+        validateText(category,
+                "Η κατηγορία δεν μπορεί να είναι κενή.");
+
+        validateText(brand,
+                "Το brand δεν μπορεί να είναι κενό.");
 
         category = category.trim().toLowerCase();
 
         if (!isValidCategory(category)) {
 
             throw new IllegalArgumentException(
-                    "Μη αποδεκτή κατηγορία.");
+                    "Μη αποδεκτή κατηγορία προϊόντος.");
         }
 
         this.barcode = barcode.trim();
@@ -38,6 +71,12 @@ public class Product {
         this.brand = brand.trim();
     }
 
+    /**
+     * Έλεγχος εγκυρότητας κατηγορίας.
+     *
+     * @param category κατηγορία προς έλεγχο
+     * @return true αν είναι αποδεκτή
+     */
     public static boolean isValidCategory(String category) {
 
         if (category == null) {
@@ -51,38 +90,62 @@ public class Product {
                 || category.equals(CATEGORY_PHARMACY);
     }
 
-    protected static void validateBarcode(String barcode) {
+    /**
+     * Έλεγχος barcode.
+     * Επιτρέπονται μόνο αριθμοί μήκους 3-20 ψηφίων.
+     *
+     * @param barcode barcode προς έλεγχο
+     */
+    public static void validateBarcode(String barcode) {
 
         if (barcode == null
-                || !barcode.trim().matches("\\d+")) {
+                || !barcode.trim().matches("\\d{3,20}")) {
 
             throw new IllegalArgumentException(
-                    "Μη έγκυρο barcode.");
+                    "Το barcode πρέπει να περιέχει μόνο αριθμούς (3-20 ψηφία).");
         }
     }
 
+    /**
+     * Γενικός έλεγχος String.
+     *
+     * @param text κείμενο προς έλεγχο
+     * @param errorMessage μήνυμα σφάλματος
+     */
     protected static void validateText(String text,
-                                       String message) {
+                                       String errorMessage) {
 
         if (text == null
                 || text.trim().isEmpty()) {
 
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
+    /**
+     * Getter barcode.
+     */
     public String getBarcode() {
         return barcode;
     }
 
+    /**
+     * Getter ονόματος.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Getter κατηγορίας.
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Getter brand.
+     */
     public String getBrand() {
         return brand;
     }

@@ -5,11 +5,24 @@ package org.example;
  */
 public class StockItem {
 
+    /**
+     * Προϊόν.
+     */
     private final Product product;
 
+    /**
+     * Διαθέσιμο απόθεμα.
+     */
     private int stock;
+
+    /**
+     * Τιμή προϊόντος.
+     */
     private double price;
 
+    /**
+     * Constructor StockItem.
+     */
     public StockItem(Product product,
                      int stock,
                      double price) {
@@ -26,18 +39,30 @@ public class StockItem {
         setPrice(price);
     }
 
+    /**
+     * Getter προϊόντος.
+     */
     public Product getProduct() {
         return product;
     }
 
+    /**
+     * Getter stock.
+     */
     public int getStock() {
         return stock;
     }
 
+    /**
+     * Getter τιμής.
+     */
     public double getPrice() {
         return price;
     }
 
+    /**
+     * Setter stock.
+     */
     public void setStock(int stock) {
 
         if (stock < 0) {
@@ -49,12 +74,15 @@ public class StockItem {
         this.stock = stock;
     }
 
+    /**
+     * Setter τιμής.
+     */
     public void setPrice(double price) {
 
-        if (price <= 0) {
+        if (price <= 0 || price > 100000) {
 
             throw new IllegalArgumentException(
-                    "Η τιμή πρέπει να είναι θετική.");
+                    "Μη αποδεκτή τιμή προϊόντος.");
         }
 
         this.price = price;
@@ -65,6 +93,7 @@ public class StockItem {
 
         return product.toString() +
                 "\nStock    : " + stock +
-                "\nPrice    : " + price;
+                "\nPrice    : " +
+                String.format("%.2f", price) + "€";
     }
 }
