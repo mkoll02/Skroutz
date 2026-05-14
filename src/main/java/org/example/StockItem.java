@@ -1,99 +1,54 @@
 package org.example;
 
-/**
- * Συνδέει προϊόν με stock και τιμή.
- */
+// Κλάση που συνδέει ένα προϊόν με απόθεμα και τιμή μέσα σε συγκεκριμένο e-shop
 public class StockItem {
 
-    /**
-     * Προϊόν.
-     */
     private final Product product;
-
-    /**
-     * Διαθέσιμο απόθεμα.
-     */
     private int stock;
-
-    /**
-     * Τιμή προϊόντος.
-     */
     private double price;
 
-    /**
-     * Constructor StockItem.
-     */
-    public StockItem(Product product,
-                     int stock,
-                     double price) {
+    public StockItem(Product product, int stock, double price) {
 
         if (product == null) {
-
-            throw new IllegalArgumentException(
-                    "Το προϊόν δεν μπορεί να είναι null.");
+            throw new IllegalArgumentException("Το προϊόν δεν μπορεί να είναι null.");
         }
 
         this.product = product;
-
         setStock(stock);
         setPrice(price);
     }
 
-    /**
-     * Getter προϊόντος.
-     */
     public Product getProduct() {
         return product;
     }
 
-    /**
-     * Getter stock.
-     */
     public int getStock() {
         return stock;
     }
-
-    /**
-     * Getter τιμής.
-     */
     public double getPrice() {
         return price;
     }
 
-    /**
-     * Setter stock.
-     */
+    // update
     public void setStock(int stock) {
-
         if (stock < 0) {
-
-            throw new IllegalArgumentException(
-                    "Το stock δεν μπορεί να είναι αρνητικό.");
+            throw new IllegalArgumentException("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
         }
 
         this.stock = stock;
     }
 
-    /**
-     * Setter τιμής.
-     */
     public void setPrice(double price) {
-
-        if (price <= 0 || price > 100000) {
-
-            throw new IllegalArgumentException(
-                    "Μη αποδεκτή τιμή προϊόντος.");
+        if (price <= 0) {
+            throw new IllegalArgumentException("Η τιμή πρέπει να είναι θετική.");
         }
 
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-
-        return product.toString() +
-                "\nStock    : " + stock +
-                "\nPrice    : " +
-                String.format("%.2f", price) + "€";
+    public String toListString() {
+        return product +
+                " | Απόθεμα: " + stock +
+                " | Τιμή: " + String.format("%.2f€", price);
     }
 }

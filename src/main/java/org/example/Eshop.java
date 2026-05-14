@@ -3,49 +3,43 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Κλάση ηλεκτρονικού καταστήματος.
- */
+// Κλάση eshop
+
 public class Eshop {
 
     private final String website;
     private final String afm;
     private final String email;
 
-    private final ArrayList<StockItem> products;
+    // Λίστα προϊόντων του e-shop
+    private final List<StockItem> stockItems;
 
-    public Eshop(String website,
-                 String afm,
-                 String email) {
+    // Constructor  e-shop
+    public Eshop(String website, String afm, String email) {
 
-        validateWebsite(website);
+        // έλεγχος
+        this.website = Product.normalizeText(
+                website,
+                "Το website δεν μπορεί να είναι κενό.");
+
         validateAfm(afm);
         validateEmail(email);
 
-        this.website = website.trim();
         this.afm = afm.trim();
         this.email = email.trim();
 
-        products = new ArrayList<>();
+        // Αρχικοποίηση λίστας
+        this.stockItems = new ArrayList<>();
     }
 
-    private void validateWebsite(String website) {
-
-        if (website == null
-                || website.trim().isEmpty()) {
-
-            throw new IllegalArgumentException(
-                    "Μη έγκυρο website.");
-        }
-    }
-
+    // Έλεγχος ΑΦΜ
     private void validateAfm(String afm) {
 
         if (afm == null
                 || !afm.trim().matches("\\d{9}")) {
 
             throw new IllegalArgumentException(
-                    "Μη έγκυρο ΑΦΜ.");
+                    "Το ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.");
         }
     }
 
@@ -72,47 +66,19 @@ public class Eshop {
         return email;
     }
 
-    public List<StockItem> getProducts() {
-
-        return new ArrayList<>(products);
+    // πλήθος
+    public int getProductCount() {
+        return stockItems.size();
     }
 
-    public void addOrUpdateProduct(Product product,
-                                   int stock,
-                                   double price) {
+    // Αναζήτηση προϊόντος με barcode
+    public StockItem findStockItemByBarcode(String barcode) {
 
-        if (product == null) {
-
-            throw new IllegalArgumentException(
-                    "Το προϊόν δεν μπορεί να είναι null.");
-        }
-
-        for (StockItem item : products) {
-
-            if (item.getProduct()
-                    .getBarcode()
-                    .equals(product.getBarcode())) {
-
-                item.setStock(stock);
-                item.setPrice(price);
-
-                return;
-            }
-        }
-
-        products.add(
-                new StockItem(product, stock, price));
-    }
-
-    public StockItem findStockItem(String barcode) {
-
-        if (barcode == null
-                || barcode.trim().isEmpty()) {
-
+        if (barcode == null) {
             return null;
         }
 
-        for (StockItem item : products) {
+        for (StockItem item : stockItems) {
 
             if (item.getProduct()
                     .getBarcode()
@@ -125,57 +91,45 @@ public class Eshop {
         return null;
     }
 
-    public void displayProducts() {
+    // Προσθήκη ή ενημέρωση προϊόντος
+    public void addOrUpdateProduct(Product product,
+                                   int stock,
+                                   double price) {
 
-        if (products.isEmpty()) {
+        StockItem item =
+                findStockItemByBarcode(
+                        product.getBarcode());
+
+        if (item == null) {
+
+            stockItems.add(
+                    new StockItem(product, stock, price));
+
+        } else {
+
+            item.setStock(stock);
+            item.setPrice(price);
+        }
+    }
+
+    // Εμφάνιση προϊόντων e-shop
+    public void displayProductsForStockUpdate() {
+
+        if (stockItems.isEmpty()) {
 
             System.out.println(
-                    "Δεν υπάρχουν προϊόντα.");
+                    "Δεν υπάρχουν προϊόντα στο e-shop.");
+
             return;
         }
 
         System.out.println(
-                "\n===== Προϊόντα e-shop =====");
+                "\n===== Προϊόντα e-shop: "
+                        + website + " =====");
 
-        for (StockItem item : products) {
+        for (StockItem item : stockItems) {
 
-            Product p = item.getProduct();
-
-            System.out.println(
-                    "Barcode : " + p.getBarcode());
-
-            System.out.println(
-                    "Name     : " + p.getName());
-
-            System.out.println(
-                    "Category : " + p.getCategory());
-
-            if (p instanceof Clothing clothing) {
-
-                System.out.println(
-                        "Size     : " + clothing.getSize());
-
-                System.out.println(
-                        "Color    : " + clothing.getColor());
-            }
-
-            if (p instanceof Shoes shoes) {
-
-                System.out.println(
-                        "Size     : " + shoes.getSize());
-
-                System.out.println(
-                        "Color    : " + shoes.getColor());
-            }
-
-            System.out.println(
-                    "Stock    : " + item.getStock());
-
-            System.out.println(
-                    "Price    : " + item.getPrice());
-
-            System.out.println(
-                    "---------------------------");
+            System.out.println(item.toListString());
         }
     }
 
@@ -183,6 +137,6 @@ public class Eshop {
     public String toString() {
 
         return "Website: " + website +
-                " | AFM: " + afm;
+                " | ΑΦΜ: " + afm;
     }
 }

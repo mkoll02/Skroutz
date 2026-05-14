@@ -1,81 +1,61 @@
 package org.example;
 
-/**
- * Κλάση ρούχων.
- * Επεκτείνει την Product.
- */
+// Κλάση για την κατηγορία Ρούχα που κληρονομεί από την κλάση Προίον
+
 public class Clothing extends Product {
 
-    /**
-     * Επιτρεπτά μεγέθη.
-     */
-    private static final String SIZE_S = "S";
-    private static final String SIZE_M = "M";
-    private static final String SIZE_L = "L";
-
-    /**
-     * Μέγεθος ρούχου.
-     */
     private final String size;
-
-    /**
-     * Χρώμα ρούχου.
-     */
     private final String color;
 
-    /**
-     * Constructor ρούχου.
-     */
-    public Clothing(String barcode,
-                    String name,
-                    String brand,
-                    String size,
-                    String color) {
+    // Constructor
 
-        super(barcode,
-                name,
-                CATEGORY_CLOTHING,
-                brand);
+    public Clothing(String barcode, String name, String brand, String size, String color) {
 
-        validateText(size,
-                "Το μέγεθος δεν μπορεί να είναι κενό.");
+        // constructor Product
+        super(barcode, name, CATEGORY_CLOTHING, brand);
 
-        validateText(color,
-                "Το χρώμα δεν μπορεί να είναι κενό.");
+        // Έλεγχος μεγέθους
+        size = normalizeText(size,
+                "Το μέγεθος δεν μπορεί να είναι κενό.")
+                .toUpperCase();
 
-        size = size.trim().toUpperCase();
-
-        if (!size.equals(SIZE_S)
-                && !size.equals(SIZE_M)
-                && !size.equals(SIZE_L)) {
-
+        if (!isValidSize(size)) {
             throw new IllegalArgumentException(
-                    "Επιτρεπτά μεγέθη: S, M, L.");
+                    "Το μέγεθος ρούχου πρέπει να είναι S, M ή L.");
         }
 
         this.size = size;
-        this.color = color.trim();
+
+        // Έλεγχος χρώματος
+        this.color = normalizeText(color,
+                "Το χρώμα δεν μπορεί να είναι κενό.");
     }
 
-    /**
-     * Getter μεγέθους.
-     */
+    public static boolean isValidSize(String size) {
+
+        if (size == null) {
+            return false;
+        }
+
+        size = size.trim().toUpperCase();
+
+        return size.equals("S")
+                || size.equals("M")
+                || size.equals("L");
+    }
+
     public String getSize() {
         return size;
     }
 
-    /**
-     * Getter χρώματος.
-     */
     public String getColor() {
         return color;
     }
 
+    // Επιστρέφει πληροφορίες προϊόν
     @Override
-    public String toString() {
-
-        return super.toString() +
-                "\nSize     : " + size +
-                "\nColor    : " + color;
+    public String getExtraInfo() {
+        return " | Μέγεθος: " + size +
+                " | Χρώμα: " + color;
     }
 }

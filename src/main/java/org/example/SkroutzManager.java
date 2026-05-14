@@ -3,16 +3,15 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Διαχειριστής συστήματος.
- */
+//  Κεντρική κλάση διαχείρισης του συστήματος
+//Κρατάει τις λίστες προϊόντων και e-shops
+
 public class SkroutzManager {
 
-    private final ArrayList<Product> products;
-    private final ArrayList<Eshop> eshops;
+    private final List<Product> products;
+    private final List<Eshop> eshops;
 
     public SkroutzManager() {
-
         products = new ArrayList<>();
         eshops = new ArrayList<>();
     }
@@ -20,16 +19,11 @@ public class SkroutzManager {
     public void addProduct(Product product) {
 
         if (product == null) {
-
-            throw new IllegalArgumentException(
-                    "Το προϊόν είναι null.");
+            throw new IllegalArgumentException("Το προϊόν δεν μπορεί να είναι null.");
         }
 
-        if (findProductByBarcode(
-                product.getBarcode()) != null) {
-
-            throw new IllegalArgumentException(
-                    "Υπάρχει ήδη προϊόν με αυτό το barcode.");
+        if (findProductByBarcode(product.getBarcode()) != null) {
+            throw new IllegalArgumentException("Υπάρχει ήδη προϊόν με αυτό το barcode.");
         }
 
         products.add(product);
@@ -38,44 +32,32 @@ public class SkroutzManager {
     public void addEshop(Eshop eshop) {
 
         if (eshop == null) {
-
-            throw new IllegalArgumentException(
-                    "Το e-shop είναι null.");
+            throw new IllegalArgumentException("Το e-shop δεν μπορεί να είναι null.");
         }
 
         for (Eshop e : eshops) {
-
             if (e.getAfm().equals(eshop.getAfm())) {
-
-                throw new IllegalArgumentException(
-                        "Υπάρχει ήδη e-shop με αυτό το ΑΦΜ.");
+                throw new IllegalArgumentException("Υπάρχει ήδη e-shop με αυτό το ΑΦΜ.");
             }
 
-            if (e.getWebsite().equalsIgnoreCase(
-                    eshop.getWebsite())) {
-
-                throw new IllegalArgumentException(
-                        "Υπάρχει ήδη e-shop με αυτό το website.");
+            if (e.getWebsite().equalsIgnoreCase(eshop.getWebsite())) {
+                throw new IllegalArgumentException("Υπάρχει ήδη e-shop με αυτό το website.");
             }
         }
 
         eshops.add(eshop);
     }
 
+    // αναζήτηση προιόντος
     public Product findProductByBarcode(String barcode) {
 
-        if (barcode == null
-                || barcode.trim().isEmpty()) {
-
+        if (barcode == null) {
             return null;
         }
 
-        for (Product p : products) {
-
-            if (p.getBarcode()
-                    .equals(barcode.trim())) {
-
-                return p;
+        for (Product product : products) {
+            if (product.getBarcode().equals(barcode.trim())) {
+                return product;
             }
         }
 
@@ -84,44 +66,70 @@ public class SkroutzManager {
 
     public Eshop findEshop(String input) {
 
-        if (input == null
-                || input.trim().isEmpty()) {
-
+        if (input == null || input.trim().isEmpty()) {
             return null;
         }
 
-        for (Eshop e : eshops) {
+        input = input.trim();
 
-            if (e.getAfm().equals(input.trim())
-                    || e.getWebsite()
-                    .equalsIgnoreCase(input.trim())) {
-
-                return e;
+        for (Eshop eshop : eshops) {
+            if (eshop.getAfm().equals(input)
+                    || eshop.getWebsite().equalsIgnoreCase(input)) {
+                return eshop;
             }
         }
 
         return null;
     }
 
-    public List<Eshop> getEshops() {
+    public int countShopsSellingProduct(Product product) {
 
+        int count = 0;
+
+        for (Eshop eshop : eshops) {
+            if (eshop.findStockItemByBarcode(product.getBarcode()) != null) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    // Επιστρέφει αντίγραφο της λίστας e-shops
+    public List<Eshop> getEshops() {
         return new ArrayList<>(eshops);
     }
 
+    // Εμφανίζει διαθέσιμα e-shops
     public void displayEshops() {
 
         if (eshops.isEmpty()) {
-
-            System.out.println(
-                    "Δεν υπάρχουν e-shops.");
+            System.out.println("Δεν υπάρχουν e-shops.");
             return;
         }
 
-        System.out.println(
-                "\n===== E-SHOPS =====");
+        System.out.println("\n===== Διαθέσιμα e-shops =====");
 
-        for (Eshop e : eshops) {
-            System.out.println(e);
+        for (Eshop eshop : eshops) {
+            System.out.println("Website: " + eshop.getWebsite()
+                    + " | ΑΦΜ: " + eshop.getAfm());
+        }
+    }
+
+    // Εμφανίζει υπάρχοντα προϊόντα
+    public void displayProducts() {
+
+        if (products.isEmpty()) {
+            System.out.println("Δεν υπάρχουν προϊόντα.");
+            return;
+        }
+
+        System.out.println("\n===== Υπάρχοντα προϊόντα =====");
+
+        for (Product product : products) {
+            System.out.println(product
+                    + " | Πωλείται σε shops: "
+                    + countShopsSellingProduct(product));
         }
     }
 }
