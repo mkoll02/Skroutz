@@ -1,6 +1,5 @@
-package org.example;
+package org.example.model;
 
-// Κλάση που συνδέει ένα προϊόν με απόθεμα και τιμή μέσα σε συγκεκριμένο e-shop
 public class StockItem {
 
     private final Product product;
@@ -25,17 +24,29 @@ public class StockItem {
     public int getStock() {
         return stock;
     }
+
     public double getPrice() {
         return price;
     }
 
-    // update
     public void setStock(int stock) {
         if (stock < 0) {
             throw new IllegalArgumentException("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
         }
 
         this.stock = stock;
+    }
+
+    public void decreaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Το πλήθος πρέπει να είναι θετικό.");
+        }
+
+        if (quantity > stock) {
+            throw new IllegalArgumentException("Δεν υπάρχει αρκετό απόθεμα.");
+        }
+
+        stock -= quantity;
     }
 
     public void setPrice(double price) {

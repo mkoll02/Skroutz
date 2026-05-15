@@ -1,12 +1,12 @@
-package org.example;
+package org.example.model;
 
-// Κλάση κατηγορία Υποδήματα που κληρονομεί από την Product
 public class Shoes extends Product {
 
     private final int size;
     private final String color;
 
     public Shoes(String barcode, String name, String brand, int size, String color) {
+
         super(barcode, name, CATEGORY_SHOES, brand);
 
         if (!isValidSize(size)) {
@@ -28,7 +28,6 @@ public class Shoes extends Product {
     public String getColor() {
         return color;
     }
-
 
     @Override
     public String getExtraInfo() {

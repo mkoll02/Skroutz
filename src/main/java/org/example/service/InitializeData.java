@@ -1,7 +1,16 @@
-package org.example;
+package org.example.service;
 
-//Κλάση αρχικοποίησης δεδομένων
-//Δημιουργεί αρχικά προϊόντα και e-shops
+import org.example.model.Clothing;
+import org.example.model.Customer;
+import org.example.model.Eshop;
+import org.example.model.Order;
+import org.example.model.OrderItem;
+import org.example.model.Product;
+import org.example.model.Shoes;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class InitializeData {
 
     public void initialize(SkroutzManager manager) {
@@ -30,8 +39,6 @@ public class InitializeData {
         manager.addEshop(e3);
         manager.addEshop(e4);
 
-        // Κάθε προϊόν καταχωρείται σε 2 διαφορετικά e-shops
-
         e1.addOrUpdateProduct(p1, 10, 19.99);
         e2.addOrUpdateProduct(p1, 8, 21.50);
 
@@ -49,5 +56,27 @@ public class InitializeData {
 
         e3.addOrUpdateProduct(p6, 15, 11.99);
         e1.addOrUpdateProduct(p6, 9, 12.99);
+
+        Customer c1 = new Customer("Maria Kollia", "maria@example.com", "maria", "1234");
+        Customer c2 = new Customer("Nikos Papas", "nikos@example.com", "nikos", "1234");
+
+        manager.addCustomer(c1);
+        manager.addCustomer(c2);
+
+        List<OrderItem> orderItems1 = new ArrayList<>();
+        orderItems1.add(new OrderItem(e1.getWebsite(), p1, 1, 19.99));
+        orderItems1.add(new OrderItem(e3.getWebsite(), p5, 2, 14.99));
+
+        manager.addOrder(new Order(c1, orderItems1));
+
+        e1.findStockItemByBarcode(p1.getBarcode()).decreaseStock(1);
+        e3.findStockItemByBarcode(p5.getBarcode()).decreaseStock(2);
+
+        List<OrderItem> orderItems2 = new ArrayList<>();
+        orderItems2.add(new OrderItem(e2.getWebsite(), p3, 1, 117.99));
+
+        manager.addOrder(new Order(c2, orderItems2));
+
+        e2.findStockItemByBarcode(p3.getBarcode()).decreaseStock(1);
     }
 }

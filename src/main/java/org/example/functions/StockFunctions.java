@@ -1,8 +1,11 @@
-package org.example;
+package org.example.functions;
+
+import org.example.model.Eshop;
+import org.example.model.StockItem;
+import org.example.service.SkroutzManager;
 
 import java.util.Scanner;
 
-// 2η λειτουργία
 public class StockFunctions {
 
     private final Scanner sc;
@@ -15,7 +18,6 @@ public class StockFunctions {
 
         System.out.println("\n===== Λειτουργία 2: Ανανέωση αποθέματος =====");
 
-        // Εμφάνιση διαθέσιμων e-shops
         manager.displayEshops();
 
         System.out.print("\nΑναζήτηση e-shop με ΑΦΜ ή website: ");
@@ -34,7 +36,6 @@ public class StockFunctions {
         String answer;
 
         do {
-            // Εμφάνιση προϊόντων
             shop.displayProductsForStockUpdate();
 
             System.out.print("\nΔώσε barcode προϊόντος για αλλαγή αποθέματος: ");
@@ -50,14 +51,12 @@ public class StockFunctions {
             System.out.print("Θέλεις να ενημερώσεις άλλο προϊόν; Ν/Ο: ");
             answer = sc.nextLine().trim();
 
-        } while (answer.equalsIgnoreCase("Ν")
-                || answer.equalsIgnoreCase("ΝΑΙ"));
+        } while (answer.equalsIgnoreCase("Ν") || answer.equalsIgnoreCase("ΝΑΙ"));
 
         System.out.println("\n===== Ανανεωμένη λίστα προϊόντων =====");
         shop.displayProductsForStockUpdate();
     }
 
-    // Ανάγνωση νέου αποθέματος
     private int readStock() {
 
         int stock;
@@ -75,7 +74,6 @@ public class StockFunctions {
         return stock;
     }
 
-    //Ανάγνωση ακέραιου
     private int readInt() {
 
         while (true) {
