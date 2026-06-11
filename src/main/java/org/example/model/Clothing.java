@@ -29,14 +29,6 @@ public class Clothing extends Product {
         return size.equals("S") || size.equals("M") || size.equals("L");
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
     @Override
     public String getExtraInfo() {
         return " | Μέγεθος: " + size + " | Χρώμα: " + color;

@@ -24,9 +24,8 @@ public class ReportFunctions {
         System.out.println("1. Ιστορικό παραγγελιών πελάτη");
         System.out.println("2. Συνολική αναφορά e-shops");
         System.out.println("3. Συνολική αναφορά προϊόντων");
-        System.out.print("Επιλογή: ");
 
-        int choice = readInt();
+        int choice = readInt("Επιλογή: ");
 
         if (choice == 1) {
             showCustomerOrders(manager);
@@ -80,6 +79,7 @@ public class ReportFunctions {
             } else {
                 for (StockItem item : items) {
                     System.out.println("   Προϊόν: " + item.getProduct().getName()
+                            + item.getProduct().getExtraInfo()
                             + " | Απόθεμα: " + item.getStock()
                             + " | Τιμή: " + String.format("%.2f€", item.getPrice()));
                 }
@@ -103,13 +103,14 @@ public class ReportFunctions {
         }
     }
 
-    private int readInt() {
+    private int readInt(String message) {
 
         while (true) {
             try {
+                System.out.print(message);
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.print("Δώσε σωστό αριθμό: ");
+                System.out.println("Δώσε σωστό αριθμό.");
             }
         }
     }

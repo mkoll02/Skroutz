@@ -38,10 +38,6 @@ public class Order {
         return customer;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
     public List<OrderItem> getItems() {
         return new ArrayList<>(items);
     }

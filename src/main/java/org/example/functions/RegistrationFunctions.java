@@ -25,9 +25,8 @@ public class RegistrationFunctions {
 
         System.out.println("\n1. Καταχώρηση νέου e-shop");
         System.out.println("2. Καταχώρηση προϊόντος σε e-shop/s");
-        System.out.print("Επιλογή: ");
 
-        int choice = readInt();
+        int choice = readInt("Επιλογή: ");
 
         if (choice == 1) {
             insertEshop(manager);
@@ -49,14 +48,14 @@ public class RegistrationFunctions {
             return;
         }
 
-        String afm = readAfm();
+        String afm = readAfm("ΑΦΜ 9 ψηφίων: ");
 
         if (manager.findEshop(afm) != null) {
             System.out.println("Υπάρχει ήδη e-shop με αυτό το ΑΦΜ.");
             return;
         }
 
-        String email = readEmail();
+        String email = readEmail("Email: ");
 
         try {
             Eshop eshop = new Eshop(website, afm, email);
@@ -80,7 +79,7 @@ public class RegistrationFunctions {
         manager.displayEshops();
         manager.displayProducts();
 
-        String barcode = readBarcode();
+        String barcode = readBarcode("Δώσε barcode προϊόντος 5 ψηφίων: ");
 
         Product product = manager.findProductByBarcode(barcode);
 
@@ -108,7 +107,11 @@ public class RegistrationFunctions {
         int min = currentShops == 0 ? 2 : 1;
         int max = 4 - currentShops;
 
-        int shopsToAdd = readShopsToAdd(min, max);
+        int shopsToAdd = readIntInRange(
+                "Σε πόσα e-shops θα καταχωρηθεί το προϊόν (" + min + "-" + max + "): ",
+                min,
+                max
+        );
 
         for (int i = 1; i <= shopsToAdd; i++) {
 
@@ -132,8 +135,8 @@ public class RegistrationFunctions {
                 continue;
             }
 
-            int stock = readStock();
-            double price = readPrice();
+            int stock = readNonNegativeInt("Απόθεμα: ");
+            double price = readPositiveDouble("Τιμή: ");
 
             shop.addOrUpdateProduct(product, stock, price);
 
@@ -159,22 +162,19 @@ public class RegistrationFunctions {
             System.out.println("1. Ρούχα");
             System.out.println("2. Υποδήματα");
             System.out.println("3. Προϊόντα φαρμακείου");
-            System.out.print("Επιλογή: ");
 
-            int category = readInt();
+            int category = readInt("Επιλογή: ");
 
             Product product;
 
             if (category == 1) {
                 String size = readClothingSize();
                 String color = readText("Χρώμα: ");
-
                 product = new Clothing(barcode, name, brand, size, color);
 
             } else if (category == 2) {
                 int size = readShoeSize();
                 String color = readText("Χρώμα: ");
-
                 product = new Shoes(barcode, name, brand, size, color);
 
             } else if (category == 3) {
@@ -194,57 +194,10 @@ public class RegistrationFunctions {
         }
     }
 
-    private String readAfm() {
-
-        while (true) {
-            System.out.print("ΑΦΜ 9 ψηφίων: ");
-
-            String afm = sc.nextLine().trim();
-
-            if (afm.matches("\\d{9}")) {
-                return afm;
-            }
-
-            System.out.println("Το ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.");
-        }
-    }
-
-    private String readEmail() {
-
-        while (true) {
-            System.out.print("Email: ");
-
-            String email = sc.nextLine().trim();
-
-            if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                return email;
-            }
-
-            System.out.println("Μη έγκυρο email.");
-        }
-    }
-
-    private String readBarcode() {
-
-        while (true) {
-            System.out.print("\nΔώσε barcode προϊόντος 5 ψηφίων: ");
-
-            String barcode = sc.nextLine().trim();
-
-            if (barcode.matches("\\d{5}")) {
-                return barcode;
-            }
-
-            System.out.println("Το barcode πρέπει να έχει ακριβώς 5 ψηφία.");
-        }
-    }
-
     private String readClothingSize() {
 
         while (true) {
-            System.out.print("Μέγεθος S/M/L: ");
-
-            String size = sc.nextLine().trim().toUpperCase();
+            String size = readText("Μέγεθος S/M/L: ").toUpperCase();
 
             if (Clothing.isValidSize(size)) {
                 return size;
@@ -254,38 +207,17 @@ public class RegistrationFunctions {
         }
     }
 
-    private int readShopsToAdd(int min, int max) {
-
-        int number;
-
-        do {
-            System.out.print("Σε πόσα e-shops θα καταχωρηθεί το προϊόν (" + min + "-" + max + "): ");
-            number = readInt();
-
-            if (number < min || number > max) {
-                System.out.println("Πρέπει να επιλέξεις από " + min + " έως " + max + " e-shops.");
-            }
-
-        } while (number < min || number > max);
-
-        return number;
-    }
-
     private int readShoeSize() {
 
-        int size;
+        while (true) {
+            int size = readInt("Μέγεθος 37-45: ");
 
-        do {
-            System.out.print("Μέγεθος 37-45: ");
-            size = readInt();
-
-            if (!Shoes.isValidSize(size)) {
-                System.out.println("Το μέγεθος πρέπει να είναι από 37 έως 45.");
+            if (Shoes.isValidSize(size)) {
+                return size;
             }
 
-        } while (!Shoes.isValidSize(size));
-
-        return size;
+            System.out.println("Το μέγεθος πρέπει να είναι από 37 έως 45.");
+        }
     }
 
     private String readText(String message) {
@@ -303,50 +235,100 @@ public class RegistrationFunctions {
         }
     }
 
-    private int readInt() {
+    private String readAfm(String message) {
+
+        while (true) {
+            String afm = readText(message);
+
+            if (afm.matches("\\d{9}")) {
+                return afm;
+            }
+
+            System.out.println("Το ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.");
+        }
+    }
+
+    private String readBarcode(String message) {
+
+        while (true) {
+            String barcode = readText(message);
+
+            if (barcode.matches("\\d{5}")) {
+                return barcode;
+            }
+
+            System.out.println("Το barcode πρέπει να έχει ακριβώς 5 ψηφία.");
+        }
+    }
+
+    private String readEmail(String message) {
+
+        while (true) {
+            String email = readText(message);
+
+            if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                return email;
+            }
+
+            System.out.println("Μη έγκυρο email.");
+        }
+    }
+
+    private int readInt(String message) {
 
         while (true) {
             try {
+                System.out.print(message);
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.print("Δώσε σωστό αριθμό: ");
+                System.out.println("Δώσε σωστό ακέραιο αριθμό.");
             }
         }
     }
 
-    private int readStock() {
+    private int readIntInRange(String message, int min, int max) {
 
-        int stock;
+        while (true) {
+            int number = readInt(message);
 
-        do {
-            System.out.print("Απόθεμα: ");
-            stock = readInt();
-
-            if (stock < 0) {
-                System.out.println("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
+            if (number >= min && number <= max) {
+                return number;
             }
 
-        } while (stock < 0);
-
-        return stock;
+            System.out.println("Πρέπει να δώσεις αριθμό από " + min + " έως " + max + ".");
+        }
     }
 
-    private double readPrice() {
+    private int readNonNegativeInt(String message) {
+
+        while (true) {
+            int number = readInt(message);
+
+            if (number >= 0) {
+                return number;
+            }
+
+            System.out.println("Ο αριθμός δεν μπορεί να είναι αρνητικός.");
+        }
+    }
+
+    private double readPositiveDouble(String message) {
 
         while (true) {
             try {
-                System.out.print("Τιμή: ");
+                System.out.print(message);
 
-                double price = Double.parseDouble(sc.nextLine().trim());
+                String value = sc.nextLine().trim().replace(',', '.');
+                double number = Double.parseDouble(value);
 
-                if (price > 0) {
-                    return price;
+                if (number > 0) {
+                    return number;
                 }
 
                 System.out.println("Η τιμή πρέπει να είναι θετική.");
 
             } catch (NumberFormatException e) {
-                System.out.println("Δώσε σωστή τιμή.");
+                System.out.println("Δώσε σωστή αριθμητική τιμή.");
             }
         }
     }

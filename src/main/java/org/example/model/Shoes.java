@@ -21,14 +21,6 @@ public class Shoes extends Product {
         return size >= 37 && size <= 45;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
     @Override
     public String getExtraInfo() {
         return " | Μέγεθος: " + size + " | Χρώμα: " + color;

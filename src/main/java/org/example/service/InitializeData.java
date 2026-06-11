@@ -66,7 +66,6 @@ public class InitializeData {
         List<OrderItem> orderItems1 = new ArrayList<>();
         orderItems1.add(new OrderItem(e1.getWebsite(), p1, 1, 19.99));
         orderItems1.add(new OrderItem(e3.getWebsite(), p5, 2, 14.99));
-
         manager.addOrder(new Order(c1, orderItems1));
 
         e1.findStockItemByBarcode(p1.getBarcode()).decreaseStock(1);
@@ -74,7 +73,6 @@ public class InitializeData {
 
         List<OrderItem> orderItems2 = new ArrayList<>();
         orderItems2.add(new OrderItem(e2.getWebsite(), p3, 1, 117.99));
-
         manager.addOrder(new Order(c2, orderItems2));
 
         e2.findStockItemByBarcode(p3.getBarcode()).decreaseStock(1);

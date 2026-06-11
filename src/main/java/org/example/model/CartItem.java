@@ -45,6 +45,11 @@ public class CartItem {
         return quantity * getPrice();
     }
 
+    public boolean isSameProductAndShop(Eshop eshop, Product product) {
+        return this.eshop.getWebsite().equalsIgnoreCase(eshop.getWebsite())
+                && this.getProduct().equals(product);
+    }
+
     public void setQuantity(int quantity) {
 
         if (quantity <= 0) {

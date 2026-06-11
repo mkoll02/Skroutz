@@ -33,7 +33,7 @@ public class StockFunctions {
             return;
         }
 
-        String answer;
+        boolean continueUpdate;
 
         do {
             shop.displayProductsForStockUpdate();
@@ -48,39 +48,60 @@ public class StockFunctions {
                 System.out.println("Το απόθεμα ενημερώθηκε.");
             }
 
-            System.out.print("Θέλεις να ενημερώσεις άλλο προϊόν; Ν/Ο: ");
-            answer = sc.nextLine().trim();
+            continueUpdate = readYesNo("Θέλεις να ενημερώσεις άλλο προϊόν; Ν/Ο: ");
 
-        } while (answer.equalsIgnoreCase("Ν") || answer.equalsIgnoreCase("ΝΑΙ"));
+        } while (continueUpdate);
 
         System.out.println("\n===== Ανανεωμένη λίστα προϊόντων =====");
         shop.displayProductsForStockUpdate();
     }
 
     private int readStock() {
-
-        int stock;
-
-        do {
-            System.out.print("Νέο απόθεμα: ");
-            stock = readInt();
-
-            if (stock < 0) {
-                System.out.println("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
-            }
-
-        } while (stock < 0);
-
-        return stock;
+        return readNonNegativeInt("Νέο απόθεμα: ");
     }
 
-    private int readInt() {
+    private int readNonNegativeInt(String message) {
+
+        int number;
+
+        do {
+            number = readInt(message);
+
+            if (number < 0) {
+                System.out.println("Ο αριθμός δεν μπορεί να είναι αρνητικός.");
+            }
+
+        } while (number < 0);
+
+        return number;
+    }
+
+    private boolean readYesNo(String message) {
+
+        while (true) {
+            System.out.print(message);
+            String answer = sc.nextLine().trim();
+
+            if (answer.equalsIgnoreCase("Ν") || answer.equalsIgnoreCase("ΝΑΙ")) {
+                return true;
+            }
+
+            if (answer.equalsIgnoreCase("Ο") || answer.equalsIgnoreCase("ΟΧΙ")) {
+                return false;
+            }
+
+            System.out.println("Δώσε Ν ή Ο.");
+        }
+    }
+
+    private int readInt(String message) {
 
         while (true) {
             try {
+                System.out.print(message);
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.print("Δώσε σωστό αριθμό: ");
+                System.out.println("Δώσε σωστό ακέραιο αριθμό.");
             }
         }
     }

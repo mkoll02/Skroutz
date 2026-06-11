@@ -29,7 +29,7 @@ public class Eshop {
     }
 
     private void validateEmail(String email) {
-        if (email == null || !email.trim().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (email == null || !email.trim().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Μη έγκυρο email.");
         }
     }
@@ -69,7 +69,6 @@ public class Eshop {
     }
 
     public void addOrUpdateProduct(Product product, int stock, double price) {
-
         StockItem item = findStockItemByBarcode(product.getBarcode());
 
         if (item == null) {

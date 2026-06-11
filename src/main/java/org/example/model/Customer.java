@@ -10,6 +10,7 @@ public class Customer {
     public Customer(String fullName, String email, String username, String password) {
 
         this.fullName = Product.normalizeText(fullName, "Το ονοματεπώνυμο δεν μπορεί να είναι κενό.");
+
         validateEmail(email);
         this.email = email.trim();
 
@@ -18,7 +19,7 @@ public class Customer {
     }
 
     private void validateEmail(String email) {
-        if (email == null || !email.trim().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+        if (email == null || !email.trim().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Μη έγκυρο email πελάτη.");
         }
     }

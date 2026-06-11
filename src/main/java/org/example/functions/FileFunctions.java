@@ -17,8 +17,9 @@ public class FileFunctions {
 
         File folder = new File(FOLDER_NAME);
 
-        if (!folder.exists()) {
-            folder.mkdir();
+        if (!folder.exists() && !folder.mkdir()) {
+            System.out.println("Δεν ήταν δυνατή η δημιουργία φακέλου.");
+            return;
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
@@ -33,7 +34,7 @@ public class FileFunctions {
                 );
             }
 
-            System.out.println("Η τρέχουσα κατάσταση των e-shops αποθηκεύτηκε στο αρχείο: " + FILE_NAME);
+            System.out.println("Η κατάσταση των e-shops αποθηκεύτηκε στο αρχείο: " + FILE_NAME);
 
         } catch (IOException e) {
             System.out.println("Σφάλμα κατά την αποθήκευση αρχείου: " + e.getMessage());

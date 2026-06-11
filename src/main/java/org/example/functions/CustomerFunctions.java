@@ -26,15 +26,13 @@ public class CustomerFunctions {
         System.out.println("\n===== Λειτουργία 3: Αναζήτηση και Παραγγελία =====");
 
         List<CartItem> cart = new ArrayList<>();
-        String answer;
+        boolean continueSearch;
 
         do {
             searchProductsAndAddToCart(manager, cart);
+            continueSearch = readYesNo("\nΘέλεις νέα αναζήτηση και προσθήκη προϊόντος; Ν/Ο: ");
 
-            System.out.print("\nΘέλεις να κάνεις νέα αναζήτηση και να προσθέσεις άλλο προϊόν; Ν/Ο: ");
-            answer = sc.nextLine().trim();
-
-        } while (answer.equalsIgnoreCase("Ν") || answer.equalsIgnoreCase("ΝΑΙ"));
+        } while (continueSearch);
 
         if (cart.isEmpty()) {
             System.out.println("Το καλάθι είναι άδειο. Δεν δημιουργήθηκε παραγγελία.");
@@ -48,10 +46,9 @@ public class CustomerFunctions {
             return;
         }
 
-        System.out.print("\nΕπιβεβαίωση παραγγελίας; Ν/Ο: ");
-        String confirmation = sc.nextLine().trim();
+        showCart(cart);
 
-        if (!confirmation.equalsIgnoreCase("Ν") && !confirmation.equalsIgnoreCase("ΝΑΙ")) {
+        if (!readYesNo("\nΕπιβεβαίωση παραγγελίας; Ν/Ο: ")) {
             System.out.println("Η παραγγελία ακυρώθηκε.");
             return;
         }
@@ -68,8 +65,7 @@ public class CustomerFunctions {
 
     private void searchProductsAndAddToCart(SkroutzManager manager, List<CartItem> cart) {
 
-        System.out.print("\nΑναζήτηση προϊόντος με κατηγορία ή όνομα: ");
-        String criterion = sc.nextLine();
+        String criterion = readText("\nΑναζήτηση προϊόντος με κατηγορία ή όνομα: ");
 
         List<Product> results = manager.searchProducts(criterion);
 
@@ -92,8 +88,8 @@ public class CustomerFunctions {
                     + (lowestPrice == -1 ? "Μη διαθέσιμο" : String.format("%.2f€", lowestPrice)));
         }
 
-        System.out.print("\nΔώσε barcode προϊόντος που θέλεις να δεις: ");
-        Product selectedProduct = manager.findProductByBarcode(sc.nextLine());
+        String barcode = readText("\nΔώσε barcode προϊόντος που θέλεις να δεις: ");
+        Product selectedProduct = manager.findProductByBarcode(barcode);
 
         if (selectedProduct == null || !results.contains(selectedProduct)) {
             System.out.println("Μη έγκυρη επιλογή προϊόντος.");
@@ -116,11 +112,11 @@ public class CustomerFunctions {
                     + " | Προϊόν: " + selectedProduct.getName()
                     + selectedProduct.getExtraInfo()
                     + " | Τιμή: " + String.format("%.2f€", item.getPrice())
-                    + " | Τεμάχια: " + item.getStock());
+                    + " | Διαθέσιμα τεμάχια: " + item.getStock());
         }
 
-        System.out.print("\nΔώσε website e-shop επιλογής: ");
-        Eshop selectedShop = manager.findEshop(sc.nextLine());
+        String shopInput = readText("\nΔώσε website ή ΑΦΜ e-shop επιλογής: ");
+        Eshop selectedShop = manager.findEshop(shopInput);
 
         if (selectedShop == null || !shops.contains(selectedShop)) {
             System.out.println("Μη έγκυρη επιλογή e-shop.");
@@ -128,12 +124,32 @@ public class CustomerFunctions {
         }
 
         StockItem selectedItem = selectedShop.findStockItemByBarcode(selectedProduct.getBarcode());
-
         int quantity = readQuantity(selectedItem.getStock());
 
-        cart.add(new CartItem(selectedShop, selectedItem, quantity));
+        CartItem existing = findCartItem(cart, selectedShop, selectedProduct);
 
-        System.out.println("Το προϊόν προστέθηκε στο καλάθι.");
+        if (existing != null) {
+            try {
+                existing.setQuantity(existing.getQuantity() + quantity);
+                System.out.println("Το προϊόν υπήρχε ήδη στο καλάθι. Η ποσότητα αυξήθηκε.");
+            } catch (IllegalArgumentException e) {
+                System.out.println("Σφάλμα: " + e.getMessage());
+            }
+        } else {
+            cart.add(new CartItem(selectedShop, selectedItem, quantity));
+            System.out.println("Το προϊόν προστέθηκε στο καλάθι.");
+        }
+    }
+
+    private CartItem findCartItem(List<CartItem> cart, Eshop eshop, Product product) {
+
+        for (CartItem item : cart) {
+            if (item.isSameProductAndShop(eshop, product)) {
+                return item;
+            }
+        }
+
+        return null;
     }
 
     private void showCart(List<CartItem> cart) {
@@ -154,15 +170,10 @@ public class CustomerFunctions {
 
     private void editCart(List<CartItem> cart) {
 
-        String answer;
-
-        do {
+        while (!cart.isEmpty()) {
             showCart(cart);
 
-            System.out.print("\nΘέλεις να αλλάξεις ποσότητα προϊόντος στο καλάθι; Ν/Ο: ");
-            answer = sc.nextLine().trim();
-
-            if (!answer.equalsIgnoreCase("Ν") && !answer.equalsIgnoreCase("ΝΑΙ")) {
+            if (!readYesNo("\nΘέλεις να αλλάξεις ποσότητα προϊόντος στο καλάθι; Ν/Ο: ")) {
                 return;
             }
 
@@ -190,8 +201,7 @@ public class CustomerFunctions {
                     System.out.println("Σφάλμα: " + e.getMessage());
                 }
             }
-
-        } while (!cart.isEmpty());
+        }
     }
 
     private Customer loginOrRegister(SkroutzManager manager) {
@@ -199,9 +209,8 @@ public class CustomerFunctions {
         System.out.println("\n===== Σύνδεση / Εγγραφή Πελάτη =====");
         System.out.println("1. Login");
         System.out.println("2. Εγγραφή");
-        System.out.print("Επιλογή: ");
 
-        int choice = readInt();
+        int choice = readInt("Επιλογή: ");
 
         if (choice == 1) {
             return login(manager);
@@ -233,7 +242,7 @@ public class CustomerFunctions {
 
         try {
             String fullName = readText("Ονοματεπώνυμο: ");
-            String email = readEmail();
+            String email = readEmail("Email: ");
             String username = readText("Username: ");
 
             if (manager.findCustomerByUsername(username) != null) {
@@ -244,7 +253,6 @@ public class CustomerFunctions {
             String password = readText("Password: ");
 
             Customer customer = new Customer(fullName, email, username, password);
-
             manager.addCustomer(customer);
 
             System.out.println("Η εγγραφή ολοκληρώθηκε.");
@@ -278,6 +286,10 @@ public class CustomerFunctions {
             System.out.println("\nΗ παραγγελία ολοκληρώθηκε επιτυχώς.");
             System.out.println(order);
 
+            for (OrderItem item : order.getItems()) {
+                System.out.println("   " + item);
+            }
+
         } catch (IllegalArgumentException e) {
             System.out.println("Σφάλμα κατά την παραγγελία: " + e.getMessage());
         }
@@ -285,34 +297,16 @@ public class CustomerFunctions {
 
     private int readQuantity(int maxStock) {
 
-        int quantity;
-
-        do {
-            quantity = readInt("Πλήθος τεμαχίων: ");
+        while (true) {
+            int quantity = readInt("Πλήθος τεμαχίων: ");
 
             if (quantity <= 0) {
                 System.out.println("Το πλήθος πρέπει να είναι θετικό.");
             } else if (quantity > maxStock) {
                 System.out.println("Δεν υπάρχει αρκετό απόθεμα. Διαθέσιμα: " + maxStock);
+            } else {
+                return quantity;
             }
-
-        } while (quantity <= 0 || quantity > maxStock);
-
-        return quantity;
-    }
-
-    private String readEmail() {
-
-        while (true) {
-            System.out.print("Email: ");
-
-            String email = sc.nextLine().trim();
-
-            if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-                return email;
-            }
-
-            System.out.println("Μη έγκυρο email.");
         }
     }
 
@@ -331,6 +325,37 @@ public class CustomerFunctions {
         }
     }
 
+    private String readEmail(String message) {
+
+        while (true) {
+            String email = readText(message);
+
+            if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                return email;
+            }
+
+            System.out.println("Μη έγκυρο email.");
+        }
+    }
+
+    private boolean readYesNo(String message) {
+
+        while (true) {
+            System.out.print(message);
+            String answer = sc.nextLine().trim();
+
+            if (answer.equalsIgnoreCase("Ν") || answer.equalsIgnoreCase("ΝΑΙ")) {
+                return true;
+            }
+
+            if (answer.equalsIgnoreCase("Ο") || answer.equalsIgnoreCase("ΟΧΙ")) {
+                return false;
+            }
+
+            System.out.println("Δώσε Ν ή Ο.");
+        }
+    }
+
     private int readInt(String message) {
 
         while (true) {
@@ -338,18 +363,7 @@ public class CustomerFunctions {
                 System.out.print(message);
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Δώσε σωστό αριθμό.");
-            }
-        }
-    }
-
-    private int readInt() {
-
-        while (true) {
-            try {
-                return Integer.parseInt(sc.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.print("Δώσε σωστό αριθμό: ");
+                System.out.println("Δώσε σωστό ακέραιο αριθμό.");
             }
         }
     }

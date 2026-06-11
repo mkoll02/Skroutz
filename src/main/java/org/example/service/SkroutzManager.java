@@ -42,12 +42,12 @@ public class SkroutzManager {
             throw new IllegalArgumentException("Το e-shop δεν μπορεί να είναι null.");
         }
 
-        for (Eshop e : eshops) {
-            if (e.getAfm().equals(eshop.getAfm())) {
+        for (Eshop existing : eshops) {
+            if (existing.getAfm().equals(eshop.getAfm())) {
                 throw new IllegalArgumentException("Υπάρχει ήδη e-shop με αυτό το ΑΦΜ.");
             }
 
-            if (e.getWebsite().equalsIgnoreCase(eshop.getWebsite())) {
+            if (existing.getWebsite().equalsIgnoreCase(eshop.getWebsite())) {
                 throw new IllegalArgumentException("Υπάρχει ήδη e-shop με αυτό το website.");
             }
         }
