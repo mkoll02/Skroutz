@@ -10,14 +10,17 @@ import org.example.service.SkroutzManager;
 import java.util.List;
 import java.util.Scanner;
 
+//παρέχει αναφορές για παραγγελίες πελατών, eshops και προιόντων
 public class ReportFunctions {
 
     private final Scanner sc;
 
     public ReportFunctions(Scanner sc) {
+
         this.sc = sc;
     }
 
+    //μενού αναφορών
     public void showReports(SkroutzManager manager) {
 
         System.out.println("\n===== Λειτουργία 4: Αναζήτηση πληροφοριών - Αναφορές =====");
@@ -38,11 +41,11 @@ public class ReportFunctions {
         }
     }
 
+    //ιστορικό παραγγελιών πελάτη
     private void showCustomerOrders(SkroutzManager manager) {
 
         System.out.print("\nΔώσε username πελάτη: ");
         String username = sc.nextLine().trim();
-
         boolean found = false;
 
         for (Order order : manager.getOrders()) {
@@ -62,6 +65,7 @@ public class ReportFunctions {
         }
     }
 
+    //αναφορά eshops
     private void showEshopReport(SkroutzManager manager) {
 
         System.out.println("\n===== Συνολική Αναφορά e-shops =====");
@@ -87,6 +91,7 @@ public class ReportFunctions {
         }
     }
 
+    //αναφορά για τα προιόντα
     private void showProductReport(SkroutzManager manager) {
 
         System.out.println("\n===== Συνολική Αναφορά προϊόντων =====");

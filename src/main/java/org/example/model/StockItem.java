@@ -1,5 +1,6 @@
 package org.example.model;
 
+//συνδέει ένα προϊόν με το απόθεμα και την τιμή
 public class StockItem {
 
     private final Product product;
@@ -28,7 +29,7 @@ public class StockItem {
     public double getPrice() {
         return price;
     }
-
+    //update
     public void setStock(int stock) {
         if (stock < 0) {
             throw new IllegalArgumentException("Το απόθεμα δεν μπορεί να είναι αρνητικό.");
@@ -37,6 +38,7 @@ public class StockItem {
         this.stock = stock;
     }
 
+    //νέο απόθεμα κατόπιν αγοράς
     public void decreaseStock(int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Το πλήθος πρέπει να είναι θετικό.");

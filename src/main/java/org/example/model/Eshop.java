@@ -22,6 +22,7 @@ public class Eshop {
         this.stockItems = new ArrayList<>();
     }
 
+    //Ελέγχει την εγκυρότητα του ΑΦΜ
     private void validateAfm(String afm) {
         if (afm == null || !afm.trim().matches("\\d{9}")) {
             throw new IllegalArgumentException("Το ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία.");
@@ -68,6 +69,7 @@ public class Eshop {
         return null;
     }
 
+
     public void addOrUpdateProduct(Product product, int stock, double price) {
         StockItem item = findStockItemByBarcode(product.getBarcode());
 
@@ -79,6 +81,7 @@ public class Eshop {
         }
     }
 
+    //εμφανίζει προιόντα προκειμένου την ανανέωση
     public void displayProductsForStockUpdate() {
 
         if (stockItems.isEmpty()) {

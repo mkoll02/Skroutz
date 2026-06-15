@@ -7,10 +7,12 @@ import org.example.service.SkroutzManager;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        System.out.println("~Καλώς ήρθατε στην εφαρμογή Java_Skroutz~");
 
+        Scanner sc = new Scanner(System.in);
         SkroutzManager manager = new SkroutzManager();
         new InitializeData().initialize(manager);
 
@@ -31,6 +33,7 @@ public class Main {
 
         int choice;
 
+        //μενού μέχρι ο χρήστης να επιλέξει έξοδο
         do {
 
             printMenu();
@@ -77,7 +80,7 @@ public class Main {
         System.out.println("6. Έξοδος");
         System.out.print("Επιλογή: ");
     }
-
+    
     private static int readChoice(Scanner sc) {
 
         try {

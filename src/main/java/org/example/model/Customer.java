@@ -1,5 +1,6 @@
 package org.example.model;
 
+//βασική κλάση πελάτη
 public class Customer {
 
     private final String fullName;
@@ -18,6 +19,7 @@ public class Customer {
         this.password = Product.normalizeText(password, "Το password δεν μπορεί να είναι κενό.");
     }
 
+    //εγκυρότητα email
     private void validateEmail(String email) {
         if (email == null || !email.trim().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
             throw new IllegalArgumentException("Μη έγκυρο email πελάτη.");

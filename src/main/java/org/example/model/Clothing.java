@@ -1,5 +1,6 @@
 package org.example.model;
 
+//κληρονομεί την Product
 public class Clothing extends Product {
 
     private final String size;
@@ -19,6 +20,7 @@ public class Clothing extends Product {
         this.color = normalizeText(color, "Το χρώμα δεν μπορεί να είναι κενό.");
     }
 
+    //έλεγχος μεγέθους ρούχου
     public static boolean isValidSize(String size) {
         if (size == null) {
             return false;

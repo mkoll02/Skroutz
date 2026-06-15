@@ -9,14 +9,17 @@ import org.example.service.SkroutzManager;
 
 import java.util.Scanner;
 
+//υποστήριξη λειτουργίας 1.
 public class RegistrationFunctions {
 
     private final Scanner sc;
 
     public RegistrationFunctions(Scanner sc) {
+
         this.sc = sc;
     }
 
+    //Υλοποιεί τη λειτουργία καταχώρησης προϊόντων και eshops
     public void insertProductsAndEshops(SkroutzManager manager) {
 
         System.out.println("\n===== Λειτουργία 1: Καταχώρηση προϊόντων και e-shops =====");
@@ -37,6 +40,7 @@ public class RegistrationFunctions {
         }
     }
 
+    //Καταχωρεί νέο e-shop
     private void insertEshop(SkroutzManager manager) {
 
         System.out.println("\n===== Νέο e-shop =====");
@@ -69,6 +73,7 @@ public class RegistrationFunctions {
         }
     }
 
+    //Καταχωρεί νέο ή υπάρχον προιόν
     private void insertProductToEshops(SkroutzManager manager) {
 
         if (manager.getEshops().size() < 2) {
@@ -148,6 +153,7 @@ public class RegistrationFunctions {
         }
     }
 
+    //Δημιουργεί νέο προϊόν όταν το barcode δεν υπάρχει ήδη
     private Product createProductWithBarcode(SkroutzManager manager, String barcode) {
 
         try {

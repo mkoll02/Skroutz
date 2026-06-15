@@ -13,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**λειτουργία αναζήτησης και παραγγελίας προιόντων
+ *  καλάθι, σύνδεση/εγγραφή πελάτη
+ */
+
 public class CustomerFunctions {
 
     private final Scanner sc;
 
     public CustomerFunctions(Scanner sc) {
+
         this.sc = sc;
     }
 
+    // αναζήτηση προιόντων και παραγγελία
     public void searchAndOrder(SkroutzManager manager) {
 
         System.out.println("\n===== Λειτουργία 3: Αναζήτηση και Παραγγελία =====");
@@ -34,6 +40,7 @@ public class CustomerFunctions {
 
         } while (continueSearch);
 
+        //Άν το καλάθι είναι άδειο τότε η παραγγελία ακυρώνεται
         if (cart.isEmpty()) {
             System.out.println("Το καλάθι είναι άδειο. Δεν δημιουργήθηκε παραγγελία.");
             return;
@@ -63,10 +70,11 @@ public class CustomerFunctions {
         completeOrder(manager, customer, cart);
     }
 
+    //Αναζήτηση με βάση το όνομα ή την κατηγορία
     private void searchProductsAndAddToCart(SkroutzManager manager, List<CartItem> cart) {
 
+        //κριτήριο αναζήτησης
         String criterion = readText("\nΑναζήτηση προϊόντος με κατηγορία ή όνομα: ");
-
         List<Product> results = manager.searchProducts(criterion);
 
         if (results.isEmpty()) {
@@ -76,6 +84,8 @@ public class CustomerFunctions {
 
         System.out.println("\n===== Αποτελέσματα αναζήτησης =====");
 
+
+        // Εμφάνιση όλων των προιόντων
         for (Product product : results) {
             double lowestPrice = manager.findLowestPrice(product);
 
@@ -105,6 +115,7 @@ public class CustomerFunctions {
 
         System.out.println("\n===== Διαθέσιμα e-shops για το προϊόν =====");
 
+        //Εμφάνιση καταστημάτων
         for (Eshop eshop : shops) {
             StockItem item = eshop.findStockItemByBarcode(selectedProduct.getBarcode());
 
@@ -123,6 +134,7 @@ public class CustomerFunctions {
             return;
         }
 
+        //ανανεώνει απόθεμα
         StockItem selectedItem = selectedShop.findStockItemByBarcode(selectedProduct.getBarcode());
         int quantity = readQuantity(selectedItem.getStock());
 
@@ -141,6 +153,7 @@ public class CustomerFunctions {
         }
     }
 
+    //Αναζητά αν ένα προϊόν υπάρχει ήδη στο καλάθι
     private CartItem findCartItem(List<CartItem> cart, Eshop eshop, Product product) {
 
         for (CartItem item : cart) {
@@ -152,6 +165,7 @@ public class CustomerFunctions {
         return null;
     }
 
+    //εμφάνιση καλαθιού και ποσού
     private void showCart(List<CartItem> cart) {
 
         System.out.println("\n===== Καλάθι =====");
@@ -168,6 +182,7 @@ public class CustomerFunctions {
         System.out.println("Συνολικό ποσό: " + String.format("%.2f€", total));
     }
 
+    //επεξεργασία καλαθιού
     private void editCart(List<CartItem> cart) {
 
         while (!cart.isEmpty()) {
@@ -190,6 +205,8 @@ public class CustomerFunctions {
 
             int newQuantity = readInt("Νέα ποσότητα, ή 0 για αφαίρεση: ");
 
+
+            // Αφαίρεση από το καλάθι
             if (newQuantity == 0) {
                 cart.remove(position - 1);
                 System.out.println("Το προϊόν αφαιρέθηκε από το καλάθι.");
@@ -204,6 +221,7 @@ public class CustomerFunctions {
         }
     }
 
+    //σύνδεση ή εγγραφή
     private Customer loginOrRegister(SkroutzManager manager) {
 
         System.out.println("\n===== Σύνδεση / Εγγραφή Πελάτη =====");
@@ -238,6 +256,7 @@ public class CustomerFunctions {
         return customer;
     }
 
+
     private Customer register(SkroutzManager manager) {
 
         try {
@@ -264,11 +283,13 @@ public class CustomerFunctions {
         }
     }
 
+    // ολοκλήρωση παραγγελίας
     private void completeOrder(SkroutzManager manager, Customer customer, List<CartItem> cart) {
 
         try {
             List<OrderItem> orderItems = new ArrayList<>();
 
+            //Για κάθε προιόν του καλαθιού μειώνεται το απόθεμα και δημιουργείται OrderItem
             for (CartItem cartItem : cart) {
                 cartItem.getStockItem().decreaseStock(cartItem.getQuantity());
 
@@ -286,6 +307,7 @@ public class CustomerFunctions {
             System.out.println("\nΗ παραγγελία ολοκληρώθηκε επιτυχώς.");
             System.out.println(order);
 
+            // Εμφάνιση προιόντων παραγελίας
             for (OrderItem item : order.getItems()) {
                 System.out.println("   " + item);
             }
@@ -295,6 +317,7 @@ public class CustomerFunctions {
         }
     }
 
+    //τεμάχια
     private int readQuantity(int maxStock) {
 
         while (true) {
@@ -310,6 +333,7 @@ public class CustomerFunctions {
         }
     }
 
+    //έλεγχος εγκυρότητας από το terminal του χρήστη
     private String readText(String message) {
 
         while (true) {
@@ -325,6 +349,7 @@ public class CustomerFunctions {
         }
     }
 
+    //έλεγχος email
     private String readEmail(String message) {
 
         while (true) {

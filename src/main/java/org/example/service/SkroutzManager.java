@@ -8,7 +8,7 @@ import org.example.model.StockItem;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//βασική κλάση διαχείρισης
 public class SkroutzManager {
 
     private final List<Product> products;
@@ -22,7 +22,7 @@ public class SkroutzManager {
         customers = new ArrayList<>();
         orders = new ArrayList<>();
     }
-
+    //νέο προιόν
     public void addProduct(Product product) {
 
         if (product == null) {
@@ -36,6 +36,7 @@ public class SkroutzManager {
         products.add(product);
     }
 
+    //νέο eshop
     public void addEshop(Eshop eshop) {
 
         if (eshop == null) {
@@ -55,6 +56,7 @@ public class SkroutzManager {
         eshops.add(eshop);
     }
 
+    //νέος πελάτης
     public void addCustomer(Customer customer) {
 
         if (customer == null) {
@@ -68,6 +70,7 @@ public class SkroutzManager {
         customers.add(customer);
     }
 
+    //νέα παραγγελία
     public void addOrder(Order order) {
         if (order == null) {
             throw new IllegalArgumentException("Η παραγγελία δεν μπορεί να είναι null.");
@@ -76,6 +79,7 @@ public class SkroutzManager {
         orders.add(order);
     }
 
+    //Αναζητά προιόν με βάση το barcode
     public Product findProductByBarcode(String barcode) {
 
         if (barcode == null) {
@@ -91,6 +95,7 @@ public class SkroutzManager {
         return null;
     }
 
+    //Αναζητά eshop με βάση website ή ΑΦΜ
     public Eshop findEshop(String input) {
 
         if (input == null || input.trim().isEmpty()) {
@@ -109,6 +114,7 @@ public class SkroutzManager {
         return null;
     }
 
+    //Αναζητά πελάτη με βάση το username
     public Customer findCustomerByUsername(String username) {
 
         if (username == null || username.trim().isEmpty()) {
@@ -124,6 +130,7 @@ public class SkroutzManager {
         return null;
     }
 
+    //Υπολογίζει σε πόσα eshops πωλείται ένα προιον
     public int countShopsSellingProduct(Product product) {
 
         int count = 0;
@@ -139,6 +146,7 @@ public class SkroutzManager {
         return count;
     }
 
+    //χαμηλότερη τιμή
     public double findLowestPrice(Product product) {
 
         double lowestPrice = Double.MAX_VALUE;
@@ -158,6 +166,7 @@ public class SkroutzManager {
         return lowestPrice;
     }
 
+    //Αναζητά προιόντα με βάση όνομα ή κατηγορία
     public List<Product> searchProducts(String criterion) {
 
         List<Product> results = new ArrayList<>();
@@ -178,6 +187,7 @@ public class SkroutzManager {
         return results;
     }
 
+    //Επιστρέφει τα eshops που διαθέτουν συγκεκριμένο προιόν
     public List<Eshop> findEshopsSellingProduct(Product product) {
 
         List<Eshop> results = new ArrayList<>();
@@ -193,6 +203,7 @@ public class SkroutzManager {
         return results;
     }
 
+    //Μετρά σε πόσες παραγγελίες υπάρχει ένα προιον
     public int countOrdersContainingProduct(Product product) {
 
         int count = 0;
@@ -206,6 +217,7 @@ public class SkroutzManager {
         return count;
     }
 
+    //Μετρά πόσες παραγγελίες περιλαμβάνουν προϊόντα συγκεκριμένου eshop
     public int countOrdersForEshop(Eshop eshop) {
 
         int count = 0;
@@ -219,6 +231,7 @@ public class SkroutzManager {
         return count;
     }
 
+    //εισπράξεις
     public double getRevenueForEshop(Eshop eshop) {
 
         double revenue = 0;
@@ -230,6 +243,7 @@ public class SkroutzManager {
         return revenue;
     }
 
+    //λίστες
     public List<Product> getProducts() {
         return new ArrayList<>(products);
     }

@@ -11,6 +11,7 @@ import org.example.model.Shoes;
 import java.util.ArrayList;
 import java.util.List;
 
+//αρχικοποίηση με ενδεικτικά δεδομένα
 public class InitializeData {
 
     public void initialize(SkroutzManager manager) {

@@ -1,5 +1,6 @@
 package org.example.model;
 
+// προιόν μέσα στην παραγγελία, μία γραμμή
 public class OrderItem {
 
     private final String website;

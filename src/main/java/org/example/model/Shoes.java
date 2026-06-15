@@ -1,5 +1,6 @@
 package org.example.model;
 
+//subcass, κληρονομεί την Product
 public class Shoes extends Product {
 
     private final int size;

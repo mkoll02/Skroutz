@@ -2,6 +2,7 @@ package org.example.model;
 
 import java.util.Objects;
 
+//superclass
 public class Product {
 
     public static final String CATEGORY_CLOTHING = "ρούχα";
@@ -30,6 +31,7 @@ public class Product {
         this.category = category;
     }
 
+    //έλεγχοι
     public static void validateBarcode(String barcode) {
         if (barcode == null || !barcode.trim().matches("\\d{5}")) {
             throw new IllegalArgumentException("Το barcode πρέπει να έχει ακριβώς 5 ψηφία.");
@@ -85,6 +87,7 @@ public class Product {
                 getExtraInfo();
     }
 
+    //2 προιόντα θεωρούνται ίδια όταν έχουν το ίδιο barcode
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

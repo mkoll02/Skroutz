@@ -6,6 +6,7 @@ public class CartItem {
     private final StockItem stockItem;
     private int quantity;
 
+    //καλάθι
     public CartItem(Eshop eshop, StockItem stockItem, int quantity) {
 
         if (eshop == null) {
@@ -22,34 +23,43 @@ public class CartItem {
     }
 
     public Eshop getEshop() {
+
         return eshop;
     }
 
     public StockItem getStockItem() {
+
         return stockItem;
     }
 
     public Product getProduct() {
+
         return stockItem.getProduct();
     }
 
     public int getQuantity() {
+
         return quantity;
     }
 
     public double getPrice() {
+
         return stockItem.getPrice();
     }
 
+    //σύνολο καλαθιού
     public double getLineTotal() {
+
         return quantity * getPrice();
     }
 
+    //έλεγχος
     public boolean isSameProductAndShop(Eshop eshop, Product product) {
         return this.eshop.getWebsite().equalsIgnoreCase(eshop.getWebsite())
                 && this.getProduct().equals(product);
     }
 
+    //ενημέρωση ποσότητας
     public void setQuantity(int quantity) {
 
         if (quantity <= 0) {

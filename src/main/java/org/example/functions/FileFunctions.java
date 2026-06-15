@@ -8,11 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+//αποθήκευση δεδομένων σε αρχείο
 public class FileFunctions {
 
     private static final String FOLDER_NAME = "files";
     private static final String FILE_NAME = "files/eshops_report.txt";
 
+    //δημιουργία αρχείου
     public void saveEshopsToFile(SkroutzManager manager) {
 
         File folder = new File(FOLDER_NAME);

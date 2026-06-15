@@ -14,6 +14,7 @@ public class Order {
     private final LocalDateTime date;
     private final List<OrderItem> items;
 
+    //Δημιουργεί νέα παραγγελία
     public Order(Customer customer, List<OrderItem> items) {
 
         if (customer == null) {
@@ -42,6 +43,7 @@ public class Order {
         return new ArrayList<>(items);
     }
 
+    //Υπολογίζει το συνολικό ποσό της παραγγελίας
     public double getTotalAmount() {
         double total = 0;
 
@@ -52,6 +54,7 @@ public class Order {
         return total;
     }
 
+    //Ελέγχει αν η παραγγελία περιέχει συγκεκριμένο προιόν
     public boolean containsProduct(Product product) {
         for (OrderItem item : items) {
             if (item.getProduct().equals(product)) {
@@ -62,6 +65,7 @@ public class Order {
         return false;
     }
 
+    //Ελέγχει αν η παραγγελία περιέχει προιόν από συγκεκριμένο eshop
     public boolean containsEshop(String website) {
         for (OrderItem item : items) {
             if (item.getWebsite().equalsIgnoreCase(website)) {
@@ -72,6 +76,7 @@ public class Order {
         return false;
     }
 
+    // Υπολογίζει το ποσό της παραγγελίας που αντιστοιχεί
     public double getAmountForEshop(String website) {
         double total = 0;
 

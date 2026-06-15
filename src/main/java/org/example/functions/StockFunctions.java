@@ -6,6 +6,7 @@ import org.example.service.SkroutzManager;
 
 import java.util.Scanner;
 
+//ανανέωση αποθέματος
 public class StockFunctions {
 
     private final Scanner sc;
@@ -56,10 +57,13 @@ public class StockFunctions {
         shop.displayProductsForStockUpdate();
     }
 
+    // νέο απόθεμα
     private int readStock() {
+
         return readNonNegativeInt("Νέο απόθεμα: ");
     }
 
+    //έλεγχος εγκυρότητας
     private int readNonNegativeInt(String message) {
 
         int number;
